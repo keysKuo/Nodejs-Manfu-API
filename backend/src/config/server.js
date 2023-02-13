@@ -20,7 +20,9 @@ const init = () => {
             layoutsDir: path.join(__dirname, '../resources/views/layouts/'),
             partialsDir: path.join(__dirname, '../resources/views/partials/'),
             helpers: {
-
+                formatCurrency: (number) => {
+                    return number.toLocaleString('vi', {style: 'currency', currency: 'VND'});
+                }
             }
         })
     );
@@ -30,7 +32,10 @@ const init = () => {
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cookie('SUD'));
-    app.use(session({ cookie: { maxAge: 30000000 } }));
+    app.use(session({ 
+        cookie: { maxAge: 30000000 }, 
+        saveUninitialized: true 
+    }));
     app.use(flash());
     app.use(bodyParser.urlencoded({ extended: false }));
     return app;

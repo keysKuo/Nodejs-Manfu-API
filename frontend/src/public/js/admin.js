@@ -1,0 +1,3 @@
+$(document).ready(() => {
+    $('.layer').hide();
+})

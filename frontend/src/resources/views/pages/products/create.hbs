@@ -1,0 +1,142 @@
+{{#if error}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{error}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{{/if}}
+{{#if success}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{success}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{{/if}}
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='card shadow'>
+                <div class='card-header d-flex justify-content-between'>
+                    <h4>{{pageName}}</h4>
+                    <a type="button" href="/admin/storage-product" class="btn btn-secondary">Trở lại</a>
+                </div>
+                <div class='card-body'>
+                    <form class="form" enctype="multipart/form-data" method="POST">
+                        <fieldset id="sizeForm">
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label class="control-label text-uppercase" for="name">TÊN SẢN PHẨM<span style="color:red"> *</span></label>
+                                    <input id="pname" name="pname" placeholder="Tên sản phẩm"
+                                    class="form-control" required type="text">
+                                </div>
+                                <div class="form-group col">
+                                    
+                                    <div class='level1-box form-group'>
+                                        <label class='control-label text-uppercase ' for='category'>Phân loại<span style="color:red"> *</span></label>
+                                        <select id='category' name='category' class='form-control'>
+                                            <option value=''>Chọn loại...</option>
+                                            {{#each categories}}
+                                                    <option class="text-capitalize" value='{{this}}'>{{this}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+   
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            <div class="form-row">
+                                
+                                <div class="form-group col">
+                                    <label class="control-label text-uppercase" for="name">Giá sản phẩm<span style="color:red"> *</span></label>
+                                    <input id="price" name="price" placeholder="Giá"
+                                    class="form-control" required type="number">
+                                </div>
+                                
+
+                                <div class="form-group col">
+                                    <label class="control-label text-uppercase" for="name">Độ ưu tiên<span style="color:red"> *</span></label>
+                                    <input id="priority" name="priority" placeholder="Độ ưu tiên"
+                                    class="form-control" required type="number">
+                                </div>
+                                
+                                
+
+
+                            
+                            </div>
+
+                            <div class="form-group">
+                                <label for="" class="mr-2 text-uppercase">Trạng thái</label><br>
+                                <div class="form-check form-check-inline ml-1 mt-1">
+                                    <input class="form-check-input" name="is_available" type="checkbox" id="inlineCheckbox2" value="Mới">
+                                    <label class="form-check-label" for="inlineCheckbox2">Sẵn sàng phục vụ</label>
+                                </div>
+                                
+                            </div> 
+                            
+                            
+
+                            
+                        </fieldset>
+                        
+                        <div class="form-group mt-3">
+                                <label class="control-label text-uppercase" for="pimg">HÌNH ẢNH SẢN PHẨM<span style="color:red">*</span></label>
+                                <div class="form-group-container">
+                                    <input id="pimg" accept="image/*" required="" name="pimg"
+                                        class="form-control-file" onchange="preview()" type="file" multiple>
+                                    <p id="num-of-file" class="mt-1">Chưa có ảnh nào được chọn</p>
+                                    <div id="images-upload">
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="form-group">
+                                <label class="control-label text-uppercase" for="description">Mô tả sản phẩm</label>
+                                <textarea id="description" name="description" class="ckeditor"></textarea>
+                            </div>
+                        <div class="form-footer">
+                                <button type="submit" class="btn btn-success">Thêm sản phẩm</button>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let fileInput = document.getElementById("pimg")
+    let imageContainer = document.getElementById('images-upload')
+    let numOfFiles = document.getElementById('num-of-file')
+
+    function preview() {
+        imageContainer.innerHTML = ""
+        numOfFiles.textContent = `${fileInput.files.length} ảnh đã được chọn`;
+
+        for (i of fileInput.files) {
+            let reader = new FileReader()
+            let figure = document.createElement("figure")
+            let figCap = document.createElement("figcaption")
+
+            figCap.innerText = i.name
+            figure.appendChild(figCap)
+            reader.onload = () => {
+                let img = document.createElement("img");
+                img.setAttribute("src", reader.result);
+                img.setAttribute("width", '50%');
+                figure.insertBefore(img, figCap);
+            }
+            imageContainer.appendChild(figure);
+            reader.readAsDataURL(i)
+        }
+    }
+    CKEDITOR.replace('ckeditor')
+
+    
+</script>

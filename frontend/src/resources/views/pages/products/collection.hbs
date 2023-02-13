@@ -1,0 +1,169 @@
+{{> videoHero}}
+<section class='section category-section'>
+    {{> heading title=category.title }}
+</section>
+<section class='section top-section danhmuc-subcate section-boxed section-height-default section-height-default' data-aos='fade-up'>
+    <div class='container -gap-default'>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='wrap'>
+                    <div class='wrap'>
+                        <div class='breadcrumb'>
+                            <div class='container'>
+                                <nav class='nav breadcrumb'>
+                                    <span class='nmr-crumb'>
+                                        <a class='nav-link p-1' href='/'></a>
+                                    </span>
+                                    <span class='nmr-crumb'>
+                                        <a class='nav-link p-1' href='/'>
+                                            <i class='fa fa-angle-right'></i>
+                                            {{category.title}}
+                                        </a>
+                                    </span>
+                                </nav>
+                            </div>
+                        </div>
+
+                        <div class='product_categories'>
+                            <div class='container'>
+                                <div class='product_categories'>
+                                    <ul class='product-categories'>
+                                        {{#each category.subCat}}
+                                            <li class='cat-item cat-item-41'>
+                                                <a href='{{href}}'>{{title}}</a>
+                                            </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class='section m-4' data-aos='fade-up'>
+    <div class='container products'>
+        <div class='row'>
+            <div class='col-md-8'>
+                <div class='text-end ml-2'>
+                    <form class='' method='get'>
+                        <select
+                            name='orderby'
+                            class='orderby bg-transparent text-light p-2'
+                            aria-label='Đơn hàng của cửa hàng'
+                        >
+                            <option class='text-dark' value=' featured' selected='selected'>Sản phẩm nổi bật</option>
+                            <option class='text-dark' value='price'>Giá tăng dần</option>
+                            <option class='text-dark' value='price-desc'>Giá giảm dần</option>
+                            <option class='text-dark' value='oldest_to_recent'>Cũ nhất</option>
+                            <option class='text-dark' value='date'>Mới nhất</option>
+                            <option class='text-dark' value='popularity'>Bán chạy nhất</option>
+                        </select>
+                        <input type='hidden' name='paged' value='1' />
+                    </form>
+                </div>
+
+                <div class='row'>
+                    {{#each lsProduct}}
+                        <div class='col-md-3 px-1'>
+                            {{> productPartials hasButton=true}}
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <div class='col-md-4 p-2' style='border:3px solid #ffba00'>
+                <div class='row'>
+                    <div class='-1 posts--thumbnail-left _width-initial posts'>
+                        <div class='heading-title-arround p-2'>
+                            <h2 class='heading-title size-default fs-6 text-start' style='text-transform: uppercase;'>
+                                Chọn khoản giá
+                            </h2>
+                        </div>
+                    </div>
+                    <div class='mb-3'>
+                        <div class='elementor-widget-container'>
+                            <aside id='price_list_filter-3' class='price_list_filter widget_layered_nav'>
+                                <ul class='layered-nav-list'>
+                                    <li class='layered-nav-list__item mb-2 wc-layered-nav-term'>
+                                        <a
+                                            href='/danh-muc-san-pham/do-noi-that/?max_price=5000000'
+                                        >Từ 0 - 5 Triệu Đồng</a>
+                                    </li>
+                                    <li class='layered-nav-list__item mb-2 wc-layered-nav-term'>
+                                        <a
+                                            href='/danh-muc-san-pham/do-noi-that/?max_price=20000000&amp;min_price=5000000'
+                                        >Từ 5 - 20 Triệu Đồng</a>
+                                    </li>
+                                    <li class='layered-nav-list__item mb-2 wc-layered-nav-term'>
+                                        <a
+                                            href='/danh-muc-san-pham/do-noi-that/?max_price=50000000&amp;min_price=20000000'
+                                        >Từ 20 - 50 Triệu Đồng</a>
+                                    </li>
+                                    <li class='layered-nav-list__item mb-2 wc-layered-nav-term'>
+                                        <a
+                                            href='/danh-muc-san-pham/do-noi-that/?max_price=100000000&amp;min_price=50000000'
+                                        >Từ 50 - 100 Triệu Đồng</a>
+                                    </li>
+                                    <li class='layered-nav-list__item mb-2 wc-layered-nav-term'>
+                                        <a
+                                            href='/danh-muc-san-pham/do-noi-that/?min_price=100000000'
+                                        >Lớn hơn 100 Triệu Đồng</a>
+                                    </li>
+                                </ul>
+                            </aside>
+                        </div>
+                    </div>
+
+                    <div class='-1 posts--thumbnail-left _width-initial posts'>
+                        <div class='heading-title-arround p-2'>
+                            <h2 class='heading-title size-default fs-6 text-start' style='text-transform: uppercase;'>
+                                SẢN PHẨM KHUYẾN MÃI
+                            </h2>
+                        </div>
+                    </div>
+                    {{#each lsProduct as |product|}}
+                        {{#if discount}}
+                            <div class='col-md-6'>
+                                {{> productPartials}}
+                            </div>
+                        {{/if}}
+                    {{/each}}
+
+                    <div class='posts--thumbnail-left _width-initial posts'>
+                        <div class='heading-title-arround p-2'>
+                            <h2 class='heading-title size-default fs-6 text-start' style='text-transform: uppercase;'>
+                                SẢN PHẨM Bán chạy
+                            </h2>
+                        </div>
+                    </div>
+                    {{#each lsProduct as |product|}}
+                        {{#if isHot}}
+                            <div class='col-md-6'>
+                                {{> productPartials}}
+                            </div>
+                        {{/if}}
+                    {{/each}}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class='section'>
+    <div class='container'>
+        <div class='row'>
+            {{#each posts}}
+                <div
+                    class='col-lg-3 col-md-6 col-12 mt-4 pt-2 picture-item shuffle-item shuffle-item--visible'
+                    data-groups='[&quot;business&quot;]'
+                >
+                    {{> postPartials }}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</section>

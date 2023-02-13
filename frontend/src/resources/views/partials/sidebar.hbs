@@ -1,0 +1,73 @@
+<div class='sidebar'>
+    <div class='logo-details mt-3'>
+        <div class='logo-box'>
+            <div style='border-radius: 50%'>
+                <img width='100%' src='/images/Logo/manfu-logo2.png' alt='' />
+            </div>
+        </div>
+        <a href='/'><span class='logo_name'>Manfu Hotpot</span></a>
+        <i id='menu-toggle' class='fa-solid fa-bars fa-lg text-white ml-3'></i>
+    </div>
+    <ul class='nav-links'>
+        {{! Trang chủ }}
+        <li>
+            <div class='icon-link'>
+                <a target='_blank' href='/'>
+                    <i class='fas fa-home'></i>
+                    <span class='link_name'>Trang chủ</span>
+                </a>
+            </div>
+        </li>
+
+        {{!-- {{! Đơn hàng }}
+        <li class=''>
+            <div class='icon-link'>
+                <a href='/admin/orders/storage'>
+                    <i class='fa-solid fa-receipt'></i>
+                    <span class='link_name'>Đơn hàng</span>
+                </a>
+            </div>
+        </li> --}}
+
+        {{! Sản phẩm }}
+        <li>
+            <div class='icon-link'>
+                <a href='/admin/storage-product'>
+                    <i class='fas fa-book'></i>
+                    <span class='link_name'>Menu sản phẩm</span>
+                </a>
+            </div>
+        </li>
+
+
+        {{! Nhân viên }}
+        <li class=''>
+            <div class='icon-link'>
+                <a href='/admin/staff-manage'>
+                    <i class='fa-solid fa-address-card'></i>
+                    <span class='link_name'>Nhân viên</span>
+                </a>
+            </div>
+        </li>
+
+        {{! Update By Excel }}
+        <li class=''>
+            <div class='icon-link'>
+                <a href='/admin/updateByExcel'>
+                    <i class='fa-solid fa-refresh'></i>
+                    <span id="updateBtn" class='link_name'>Cập nhật</span>
+                </a>
+            </div>
+        </li>
+
+        {{! Đăng xuất }}
+        <li>
+            <div class='icon-link'>
+                <a href='/admin/user/logout'>
+                    <i class='fa-solid fa-right-from-bracket'></i>
+                    <span class='link_name'>Đăng xuất</span>
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>
