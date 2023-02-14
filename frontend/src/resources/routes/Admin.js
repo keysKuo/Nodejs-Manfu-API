@@ -82,7 +82,7 @@ router.get('/delete-product/:pid', async (req, res, next) => {
     const { pid } = req.params;
     
     await fetch(API_URL + `/products/delete/${pid}`, {
-        method: 'POST',
+        method: 'DELETE',
         headers: { 'Content-Type': 'application/json'},
     })
     .then(async (result) => {

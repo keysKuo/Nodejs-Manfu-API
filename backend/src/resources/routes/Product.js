@@ -66,7 +66,7 @@ router.post('/create', async (req, res, next) => {
 })
 
 // [POST] Delete a product -> /api/products/delete/:pid
-router.post('/delete/:pid', async (req, res, next) => {
+router.delete('/delete/:pid', async (req, res, next) => {
     const { pid } = req.params;
     
     await db.Execute(queryString('delete', {
