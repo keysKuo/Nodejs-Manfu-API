@@ -1,6 +1,6 @@
-﻿--create database manfu
---drop database manfu
---use manfu
+﻿create database manfu
+drop database manfu
+use manfu
 
 create table __PRODUCT (
 	product_ID varchar(10),
@@ -9,7 +9,7 @@ create table __PRODUCT (
 	product_price int,
 	product_priority int,
 	is_available bit, --1 is true and 0 is false
-	image_link varchar(255) null,
+	image_link varchar(255)
 
 	constraint PK_FOOD primary key (product_ID)
 )
@@ -17,9 +17,11 @@ create table __PRODUCT (
 create table __STAFF(
 	staff_ID varchar(10),
 	staff_name nvarchar(255),
+	
 	join_date date,
 	roles varchar(255) check (roles in ('chef', 'staff', 'manager', 'admin')),
-
+	image_link varchar(255) null,
+	password varchar(255) null,
 	constraint PK_STAFF primary key (staff_ID)
 )
 
@@ -67,23 +69,21 @@ create table __ORDER_DETAIL (
 	constraint FK_ORDER_DETAIL_PRODUCT foreign key (product_ID) references __PRODUCT(product_ID),
 	constraint FK_ORDER_DETAIL_ORDER foreign key (order_ID) references __ORDER(order_ID)
 )
--------------------------------------
---------------------------------------
 
+
+
+--------------------------------------
 insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available) 
 values ('TK000001', N'ticket buffet lẩu','ticket', 500000, 10, 1)
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available) 
-values ('EX000001', N'khăn lạnh', 'extra', 5000, 9, 1)
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available) 
-values ('FD000001', N'bò tái','buffet', 50000, 5, 1)
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available) 
-values ('AL000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1)
+insert into __PRODUCT values ('EX000001', N'khăn lạnh', 'extra',5000, 9, 1, null)
+insert into __PRODUCT values ('FD000001', N'bò tái','buffet', 50000, 5, 1, null)
+insert into __PRODUCT values ('AL000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
 --
 insert into __STAFF (staff_ID, staff_name, join_date, roles) 
 values ('EMP0000001', N'Nguyên Văn A', getdate(), 'admin')
-insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager')
-insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff')
-insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef')
+insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, null)
+insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, null)
+insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null)
 --
 insert into __TABLE (table_ID, table_seat, is_available, staff_ID) 
 values ('TAB0000001', 4, 0, 'EMP0000003')
@@ -113,8 +113,9 @@ insert into __ORDER_DETAIL values ('OR00000003', 'TK000001', 3, 500000, 'success
 insert into __ORDER_DETAIL values ('OR00000003', 'FD000001', 5, 75000, 'idle', 4)
 insert into __ORDER_DETAIL values ('OR00000003', 'EX000001', 5, 75000, 'idle', 4)
 
-------------------------------------------------------------------------------------
-go
+select * from __STAFF
+
+--drop trigger TABLE_BILL_HANDLER 
 create trigger TABLE_BILL_HANDLER 
 on __BILL
 for insert
@@ -131,39 +132,31 @@ begin
 		rollback tran
 	end
 end
--------------------------------------------------------------------------------------------------
-
-
-
-
---update __PRODUCT
---set image_link = '10000000'
---where __PRODUCT.product_ID = 'AL000001'
---select * from __PRODUCT
-
---drop trigger TABLE_BILL_HANDLER 
 
 --select * from __BILL
 --select * from __TABLE
 
---insert into __BILL values ('BIL0000004', 0, GETDATE(), 'TAB0000001')
+insert into __BILL values ('BIL0000004', 0, GETDATE(), 'TAB0000001')
 
---select t1.order_ID, t2.product_ID, t2.quantity, t2.price, t2.product_status, t2.product_priority, t1.created_at 
---from (
---	Select order_ID, O.created_at 
---	From __ORDER O, __TABLE T, __BILL B 
---	Where O.table_ID = T.table_ID AND B.table_ID = T.table_ID AND B.bill_ID = 'BIL0000001'
---) t1 
---inner join
---(
---	select * 
---	from __ORDER_DETAIL
---) t2
---ON t1.order_ID = t2.order_ID
---order by t1.order_ID asc
+select t1.order_ID, t2.product_ID, t2.quantity, t2.price, t2.product_status, t2.product_priority, t1.created_at 
+from (
+	Select order_ID, O.created_at 
+	From __ORDER O, __TABLE T, __BILL B 
+	Where O.table_ID = T.table_ID AND B.table_ID = T.table_ID AND B.bill_ID = 'BIL0000001'
+) t1 
+inner join
+(
+	select * 
+	from __ORDER_DETAIL
+) t2
+ON t1.order_ID = t2.order_ID
+order by t1.order_ID asc
 
---alter table __PRODUCT
---ADD image_link varchar(255)
---select * from __PRODUCT
+alter table __PRODUCT
+ADD image_link varchar(255)
+select * from __PRODUCT
+
+update __STAFF
+set password = '$2a$10$BG7NfEFw9jA8jG9GvPTtxu/6HJU51xWLB27U8PivXjbY4hbtiVYzG'
 
 --drop database manfu
