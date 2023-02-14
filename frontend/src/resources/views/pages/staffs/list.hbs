@@ -1,0 +1,115 @@
+{{#if success}}
+    <div class='alert alert-success alert-dismissible fade show' role='alert'>
+        {{success}}
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+        </button>
+    </div>
+{{/if}}
+
+{{#if error}}
+    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        {{error}}
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+        </button>
+    </div>
+{{/if}}
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='card shadow'>
+                <div class='card-header d-flex justify-content-between'>
+                    <h4>{{pageName}}</h4>
+                    <a href='/admin' class='btn btn-success'><i class='fa-solid fa-plus'></i>
+                        Thêm nhân viên</a>
+                </div>
+                <div class='card-body'>
+                    <table class='table table-hover data-table'>
+                        <thead class='thead-light'>
+                            <tr>
+                                <th scope='col'>Hình ảnh</th>
+                                <th scope='col'>Tên</th>
+                                <th scope='col'>Mã</th>
+                                <th scope='col'>Vị trí</th>
+                                <th scope='col'>Ngày bắt đầu</th>
+                                <th scope='col'></th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#if data}}
+                                {{#each data}}
+                                    <tr>
+                                        <td><img src='{{uimg}}' alt='' width='70%' /></td>
+                                        <td>{{username}}</td>
+                                        <td>
+                                            {{uid}}
+                                        </td>
+                                        <td>       
+                                            {{role}}
+                                        </td>
+                                        <td>
+                                                {{join_date}}
+                                        </td>
+                                        
+                                        <td class='d-flex'>
+                                            <!-- Button trigger modal -->
+                                            <a class='text-info w-100' href='/admin/preview-staff/{{uid}}'>
+                                                <i class='fa-solid fa-eye fa-lg'></i>
+                                            </a>
+                                            <!-- Button trigger modal -->
+                                            <a class='text-warning w-100' href='/admin/update-product/{{uid}}'>
+                                                <i class='fas fa-edit fa-lg'></i>
+                                            </a>
+                                            <!-- Button trigger modal -->
+                                            <a
+                                                class='text-danger w-100'
+                                                data-toggle='modal'
+                                                data-target='#deleteModal'
+                                                onclick="$('#deleteBtn').attr('href', '/admin/delete-product/{{uid}}')"
+                                            >
+                                                <i class='fas fa-trash fa-lg'></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            {{else}}
+                                <tr><td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {{/if}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class='modal fade' id='deleteModal'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='exampleModalLabel'>Xóa sản phẩm</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                Bạn có muốn xóa sản phẩm này ?
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+                <a type='button' id='deleteBtn' class='btn btn-danger'>Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>

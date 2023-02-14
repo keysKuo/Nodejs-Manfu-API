@@ -144,9 +144,11 @@ router.post('/update-product/:pid', upload.single('pimg'), async (req, res, next
     
     if(file) {
         pimg = `/uploads/pimg/${pid}/${file.filename}`;
-        fileapis.deleteSync('frontend/src/public' + oldpath, err => [
-            console.log(err)
-        ])
+        if(oldpath) {
+            fileapis.deleteSync('frontend/src/public' + oldpath, err => [
+                console.log(err)
+            ])
+        } 
     }
     else {
         pimg = oldpath;
@@ -203,7 +205,77 @@ router.get('/preview-product/:pid', async (req, res, next) => {
             error: req.flash('error') || ''
         })
     })
+    .catch(err => {
+        req.flash('error', 'Không tìm thấy thông tin sản phẩm này');
+        return res.redirect('/admin/storage-product');
+    })
 })
 
+
+// [GET] Preview Staff -> /admin/preview-staff/:uid
+router.get('/preview-staff/:uid', async (req, res, next) => {
+    const { uid } = req.params;
+
+    await fetch(API_URL + `/users/getUser/${uid}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json'}
+    })
+    .then(async result => {
+        result = await result.json();
+        let data = {};
+        if(result.success) {
+            data = result.data;  
+        }
+
+        return res.render('pages/staffs/preview', {
+            layout: 'admin',
+            pageName: 'Thông tin nhân viên',
+            data: {
+                uid: data.staff_ID,
+                username: data.staff_name,
+                join_date: new Date(data.join_date).toLocaleString('vi-vn'),
+                role: data.roles,
+                uimg: data.image_link
+            }
+        })
+    })
+    .catch(err => {
+        req.flash('error', 'Không tìm thấy thông tin nhân viên này');
+        return res.redirect('/admin/list-staffs');
+    })
+})
+
+// [GET] List all the staffs -> /admin/list-staffs
+router.get('/list-staffs', async (req, res, next) => {
+    await fetch(API_URL + '/users/getUsers', {
+        method: 'GET', 
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(async result => {
+        result = await result.json();
+        let data = []
+        if(result.success) {
+            data = result.data.map(user => {
+                return {
+                    uid: user.staff_ID,
+                    username: user.staff_name,
+                    join_date: new Date(user.join_date).toLocaleString('vi-vn'),
+                    role: user.roles,
+                    uimg: user.image_link
+                }
+            });
+        }
+
+        return res.render('pages/staffs/list', {
+            layout: 'admin',
+            pageName: 'Danh sách nhân viên',
+            data: data
+        })
+    })
+    .catch(err => {
+        req.flash('error', 'Không tìm thấy nhân viên nào');
+        return res.redirect('/admin');
+    })
+})
 
 module.exports = router;

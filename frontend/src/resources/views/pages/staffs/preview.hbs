@@ -1,0 +1,52 @@
+<div style="width: 50%" class='container'>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='card shadow'>
+                <div class='card-header d-flex justify-content-between'>
+                    <h4>{{pageName}}</h4>
+                    <a type='button' href='/admin/list-staffs' class='btn btn-secondary'>Trở lại</a>
+                </div>
+                <div class='card-body'>
+                    <div class='detail'>
+                        <div class='detail__container'>
+                            <div style="grid-template-columns: 30% 70%;" class='detail__content'>
+                                <div class='detail__container__left'>
+                                    <div class='detail__container__left__img'>
+                                        <img src='{{data.uimg}}' alt='detail' />
+                                    </div>
+                                    
+                                </div>
+                                <div style="padding-left: 50px; padding-top: 20px"
+                                 class='detail__container__right'>
+                                    <div class='detail__container__right__title'>
+                                        <h3>{{data.username}}</h3>
+                                    </div>
+                                    <div class='detail__container__right__desc'>
+                                        <p class='text-decoration-line-through'>Mã nhân viên: 
+                                                    <span>{{data.uid}}</span></p>
+                                        <p class='text-decoration-line-through'>Ngày bắt đầu: 
+                                                    <span>{{data.join_date}}</span> </p>
+                                        <p class='text-decoration-line-through'>Vị trí: 
+                                                     <span>{{data.role}}</span></p>
+                                        
+                                                
+                                        
+                                        
+                                    </div>
+                                    
+                                    <div class=''>
+                                        <i class='fab fa-facebook'></i>
+                                        <i class='fab fa-twitter'></i>
+                                        <i class='fas fa-envelope'></i>
+                                        <i class='fab fa-linkedin'></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
