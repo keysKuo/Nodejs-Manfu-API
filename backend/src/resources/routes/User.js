@@ -75,4 +75,40 @@ router.post('/login', async (req, res, next) => {
     })
 })
 
+router.post('/register', async (req, res, next) => {
+    const { username, dob, email, phone, role , password } = req.body;
+
+    await db.Query(queryString('select', {
+        select: '*',
+        table: '__STAFF',
+        where: `staff_phone = '${phone}'`
+    }))
+    .then(async records => {
+        if(records.length != 0) {
+            return res.status(300).json({success: false, msg: 'Nhân viên này đã tồn tại'});
+        }
+
+        let uid = 'NV' + uuid().substring(0,8);
+        let hash = bcrypt.hashSync(password, 10);
+        await db.Execute(queryString('insert', {
+            table: '__STAFF',
+            values: `'${uid}', '${username}', '${dob}', '${email}', '${phone}', GETDATE(), '${role}', '${hash}'`
+            // id, name, dob, email, phone, join_date, role, password
+        }))
+        .then(() => {
+            return res.status(200).json({success: true, msg: 'Đăng ký tài khoản thành công'});
+        })
+        .catch(err => {
+            return res.status(500).json({success:false, err})
+        })
+    })
+    .catch(err => {
+        return res.status(500).json({success:false, err})
+    })
+})
+
+router.post('/update/:uid', async (req, res, next) => {
+    
+})
+
 module.exports = router;
