@@ -35,7 +35,7 @@
                                 <th scope='col'>Danh mục</th>
                                 <th scope='col'>Giá</th>
                                 <th scope='col'>Độ ưu tiên</th>
-                                <th scope='col'>Sẵn sàng</th>
+                                <th scope='col'>Tinh chỉnh</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,12 +67,18 @@
                                             </a>
                                             <!-- Button trigger modal -->
                                             <a
-                                                class='text-danger w-100'
+                                                style="cursor: pointer"
+                                                class='text-danger w-100 switchBtn'
+                                                data-available="{{is_available}}"
+                                                data-pid="{{pid}}"
+                                                {{!-- {{#if is_available}}
                                                 data-toggle='modal'
                                                 data-target='#deleteModal'
-                                                onclick="$('#deleteBtn').attr('href', '/admin/delete-product/{{pid}}')"
-                                            >
-                                                <i class='fas fa-trash fa-lg'></i>
+                                                {{/if}} --}}
+                                                href="/admin/status-product/{{pid}}?is_available={{is_available}}"
+                                                
+                                            >   
+                                                <i style="color: {{#if is_available}}#38c172{{else}}crimson{{/if}}" class='fas fa-power-off fa-lg'></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -100,18 +106,19 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='exampleModalLabel'>Xóa sản phẩm</h5>
+                <h5 class='modal-title' id='exampleModalLabel'>Ngưng phục vụ</h5>
                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
                     <span aria-hidden='true'>&times;</span>
                 </button>
             </div>
             <div class='modal-body'>
-                Bạn có muốn xóa sản phẩm này ?
+                Ngưng phục vụ món ăn này ?
             </div>
             <div class='modal-footer'>
                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
-                <a type='button' id='deleteBtn' class='btn btn-danger'>Xóa</a>
+                <a type='button' id='deleteBtn' class='btn btn-danger'>Xác nhận</a>
             </div>
         </div>
     </div>
 </div>
+

@@ -25,7 +25,7 @@ router.get('/storage-product', async (req, res, next) => {
                 category: d.product_category,
                 price: d.product_price,
                 priority: d.product_priority,
-                is_available: d.is_available
+                is_available: d.is_available == 1
             }
         })
 
@@ -211,6 +211,27 @@ router.get('/preview-product/:pid', async (req, res, next) => {
     })
 })
 
+// [PUT] Switch Status of product -> /admin/status-product/:pid
+router.get('/status-product/:pid', async (req, res, next) => {
+    
+    const { pid } = req.params;
+    const { is_available } = req.query;
+
+    let body = JSON.stringify({is_available});
+    await fetch(API_URL + `/products/switch-status/${pid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: body
+    })
+    .then(async result => {
+        result = await result.json();
+
+        return res.redirect('/admin/storage-product');
+    })
+    .catch(err => {
+        return res.redirect('/admin/storage-product');
+    })
+})
 
 // [GET] Preview Staff -> /admin/preview-staff/:uid
 router.get('/preview-staff/:uid', async (req, res, next) => {
