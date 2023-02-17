@@ -20,7 +20,7 @@ router.get('/storage', async (req, res, next) => {
     })
 })
 
-// [GET] Preview Product /api/products/preview
+// [GET] Preview Product /api/products/getOne/:pid
 router.get('/getOne/:pid', async (req, res, next) => {
     const { pid } = req.params;
     
@@ -38,6 +38,8 @@ router.get('/getOne/:pid', async (req, res, next) => {
         return res.status(500).json({success: false, msg: err});
     })
 })
+
+
 
 // [POST] Add a new product -> /api/products/create
 router.post('/create', async (req, res, next) => {
@@ -97,6 +99,25 @@ router.put('/update/:pid', async (req, res, next) => {
     })
     .catch(err => {
         return res.status(500).json({success: false, msg: err});
+    })
+})
+
+// [PUT] Toggle switch status of a Product -> /api/products/switch-status/:pid
+router.put('/switch-status/:pid', async (req, res, next) => {
+    const { pid } = req.params;
+    const { is_available } = req.body;
+
+    let available = is_available ? 0 : 1;
+    await db.Execute(queryString('update', {
+        table: '__PRODUCT',
+        set: `is_available = ${available}`,
+        where: `product_ID = ${pid}`
+    }))
+    .then(() => {
+        return res.status(200).json({success: true, msg: 'Chỉnh sửa trạng thái thành công'});
+    })
+    .catch(err => {
+        return res.status(500).json({success: false, err});
     })
 })
 

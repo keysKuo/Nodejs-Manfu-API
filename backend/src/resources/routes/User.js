@@ -32,7 +32,6 @@ router.get('/getUser/:uid', async (req, res, next) => {
 
 // GET User List -> /api/users/getUsers
 router.get('/getUsers', async (req, res, next) => {
-
     await db.Query(queryString('select', {
         select: '*',
         table: '__STAFF',
@@ -75,6 +74,7 @@ router.post('/login', async (req, res, next) => {
     })
 })
 
+// [POST] Sign up an account for Staff -> api/users/register
 router.post('/register', async (req, res, next) => {
     const { username, dob, email, phone, role , password } = req.body;
 
@@ -107,8 +107,24 @@ router.post('/register', async (req, res, next) => {
     })
 })
 
-router.post('/update/:uid', async (req, res, next) => {
-    
+// [PUT] Toggle switch status of Staff -> /api/users/switch-status/:uid 
+router.put('/switch-status/:uid', async (req, res, next) => {
+    const { uid } = req.params;
+    const { is_available } = req.body;
+    let available = (is_available) ? 0 : 1;
+    await db.Execute(queryString('update', {
+        table: 'STAFF',
+        set: `is_available = ${available}`,
+        where: `staff_ID = ${uid}`
+    }))
+    .then(() => {
+        return res.status(200).json({success: true, msg: 'Chỉnh sửa trạng thái thành công'});
+    })
+    .catch(err => {
+        return res.status(500).json({success: false, err});
+    })
 })
+
+// []
 
 module.exports = router;

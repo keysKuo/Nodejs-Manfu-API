@@ -22,6 +22,7 @@ create table __STAFF(
 	roles varchar(255) check (roles in ('chef', 'staff', 'manager', 'admin')),
 	image_link varchar(255) null,
 	password varchar(255) null,
+	is_available BIT,
 	constraint PK_STAFF primary key (staff_ID)
 )
 
@@ -79,11 +80,11 @@ insert into __PRODUCT values ('EX000001', N'khăn lạnh', 'extra',5000, 9, 1, n
 insert into __PRODUCT values ('FD000001', N'bò tái','buffet', 50000, 5, 1, null)
 insert into __PRODUCT values ('AL000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
 --
-insert into __STAFF (staff_ID, staff_name, join_date, roles) 
-values ('EMP0000001', N'Nguyên Văn A', getdate(), 'admin')
-insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, null)
-insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, null)
-insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null)
+insert into __STAFF (staff_ID, staff_name, join_date, roles, is_available) 
+values ('EMP0000001', N'Nguyên Văn A', getdate(), 'admin', 1)
+insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, null, 1)
+insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, null, 1)
+insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null, 1)
 --
 insert into __TABLE (table_ID, table_seat, is_available, staff_ID) 
 values ('TAB0000001', 4, 0, 'EMP0000003')
