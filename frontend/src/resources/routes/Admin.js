@@ -212,10 +212,9 @@ router.get('/preview-product/:pid', async (req, res, next) => {
 })
 
 // [PUT] Switch Status of product -> /admin/status-product/:pid
-router.get('/status-product/:pid', async (req, res, next) => {
+router.get('/status-product/:pid/:is_available', async (req, res, next) => {
     
-    const { pid } = req.params;
-    const { is_available } = req.query;
+    const { pid, is_available } = req.params;
 
     let body = JSON.stringify({is_available});
     await fetch(API_URL + `/products/switch-status/${pid}`, {
@@ -282,7 +281,8 @@ router.get('/list-staffs', async (req, res, next) => {
                     username: user.staff_name,
                     join_date: new Date(user.join_date).toLocaleString('vi-vn'),
                     role: user.roles,
-                    uimg: user.image_link
+                    uimg: user.image_link,
+                    is_available: user.is_available
                 }
             });
         }
@@ -296,6 +296,26 @@ router.get('/list-staffs', async (req, res, next) => {
     .catch(err => {
         req.flash('error', 'Không tìm thấy nhân viên nào');
         return res.redirect('/admin');
+    })
+})
+
+// [GET] Switch status a staff -> /admin/status-staff/:pid/:is_available
+router.get('/status-staff/:uid/:is_available', async (req, res, next) => {
+    const { uid, is_available } = req.params;
+
+    let body = JSON.stringify({is_available});
+    await fetch(API_URL + `/users/switch-status/${uid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: body
+    })
+    .then(async result => {
+        result = await result.json();
+        
+        return res.redirect('/admin/list-staffs');
+    })
+    .catch(err => {
+        return res.redirect('/admin/list-staffs');
     })
 })
 

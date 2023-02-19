@@ -111,11 +111,12 @@ router.post('/register', async (req, res, next) => {
 router.put('/switch-status/:uid', async (req, res, next) => {
     const { uid } = req.params;
     const { is_available } = req.body;
-    let available = (is_available) ? 0 : 1;
+    
+    let available = (is_available == "true") ? 0 : 1;
     await db.Execute(queryString('update', {
-        table: 'STAFF',
+        table: '__STAFF',
         set: `is_available = ${available}`,
-        where: `staff_ID = ${uid}`
+        where: `staff_ID = '${uid}'`
     }))
     .then(() => {
         return res.status(200).json({success: true, msg: 'Chỉnh sửa trạng thái thành công'});

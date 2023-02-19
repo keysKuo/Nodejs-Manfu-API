@@ -71,11 +71,13 @@
                                                 class='text-danger w-100 switchBtn'
                                                 data-available="{{is_available}}"
                                                 data-pid="{{pid}}"
-                                                {{!-- {{#if is_available}}
-                                                data-toggle='modal'
-                                                data-target='#deleteModal'
-                                                {{/if}} --}}
-                                                href="/admin/status-product/{{pid}}?is_available={{is_available}}"
+                                                {{#if is_available}}
+                                                    data-toggle='modal'
+                                                    data-target='#deleteModal'
+                                                    onclick="$('#deleteBtn').attr('href', '/admin/status-product/{{pid}}/{{is_available}}')"
+                                                {{else}}
+                                                    href="/admin/status-product/{{pid}}/{{is_available}}"
+                                                {{/if}}
                                                 
                                             >   
                                                 <i style="color: {{#if is_available}}#38c172{{else}}crimson{{/if}}" class='fas fa-power-off fa-lg'></i>

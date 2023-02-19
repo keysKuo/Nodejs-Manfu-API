@@ -14,6 +14,7 @@ create table __PRODUCT (
 	constraint PK_FOOD primary key (product_ID)
 )
 
+
 create table __STAFF(
 	staff_ID varchar(10),
 	staff_name nvarchar(255),
@@ -84,7 +85,7 @@ insert into __STAFF (staff_ID, staff_name, join_date, roles, is_available)
 values ('EMP0000001', N'Nguyên Văn A', getdate(), 'admin', 1)
 insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, null, 1)
 insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, null, 1)
-insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null, 1)
+insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null, 0)
 --
 insert into __TABLE (table_ID, table_seat, is_available, staff_ID) 
 values ('TAB0000001', 4, 0, 'EMP0000003')
@@ -114,7 +115,7 @@ insert into __ORDER_DETAIL values ('OR00000003', 'TK000001', 3, 500000, 'success
 insert into __ORDER_DETAIL values ('OR00000003', 'FD000001', 5, 75000, 'idle', 4)
 insert into __ORDER_DETAIL values ('OR00000003', 'EX000001', 5, 75000, 'idle', 4)
 
-select * from __STAFF
+select * from __PRODUCT
 
 --drop trigger TABLE_BILL_HANDLER 
 create trigger TABLE_BILL_HANDLER 
