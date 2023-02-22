@@ -1,4 +1,3 @@
-
 module.exports.queryString = (type, options) => {
     let query = '';
     switch (type) {

@@ -4,6 +4,7 @@ const { queryString } = require('../middlewares');
 const { uuid } = require('uuidv4');
 
 // [GET] Product Storage page -> /api/products/storage
+// Get all the products
 router.get('/storage', async (req, res, next) => {
     await db.Query(queryString('select',
         {
@@ -15,7 +16,7 @@ router.get('/storage', async (req, res, next) => {
             if (records.length != 0)
                 return res.status(200).json(
                     {
-                        code: 0,
+                        // code: 0,
                         success: true,
                         msg: "Display list of product",
                         data: records
@@ -35,22 +36,80 @@ router.get('/storage', async (req, res, next) => {
         })
 })
 
-// [GET] Preview Product /api/products/getOne/:pid
-router.get('/getOne/:pid', async (req, res, next) => {
-    const { pid } = req.params;
 
+router.get("/get-products", async (req, res, next) => {
+    await db.Query(queryString("select", {
+        select: "*",
+        table: "__PRODUCT",
+        // đoạn string tiếp theo
+        optional: "where is_available = 1 order by product_ID asc, product_priority desc"
+    }))
+        .then(data => {
+            if (data.length != 0) {
+                return res.status(200).json({
+                    // code: 0,
+                    success: true,
+                    message: "Display list of available products",
+                    data: data
+                });
+            }
+            else {
+                return res.status(404).json({
+                    code: 1,
+                    success: false,
+                    message: "Can not find available products"
+                })
+            }
+        })
+        .catch(err => {
+            return res.status(500).json({
+                code: 1,
+                success: false,
+                message: err
+            })
+        })
+})
+
+// [GET] Preview Product /api/products/get-one/:pid
+router.get('/get-one/:pid', async (req, res, next) => {
+    const { pid } = req.params;
     await db.Query(queryString('select', {
         select: '*',
         table: '__PRODUCT',
         where: `product_id = '${pid}'`
     }))
         .then(records => {
-            if (records.length != 0)
-                return res.status(200).json(records[0])
-            return res.status(404).json({});
+            if (records.length != 0){
+                let is_available = records[0].is_available;
+                if(is_available == 1) {
+                    return res.status(200).json({
+                        // code: 0,
+                        success: true,
+                        message: "Found product",
+                        data: records[0]
+                    })
+                }
+                else {
+                    return res.status(300).json({
+                        success: true,
+                        message: "Product is not available"
+                    })
+                }
+            }
+            else
+                return res.status(404).json({
+                    code: 1,
+                    success: false,
+                    message: "Can not find product",
+                })
+            // return res.status(404).json({});
         })
         .catch(err => {
-            return res.status(500).json({ success: false, msg: err });
+            return res.status(500).json({
+                code: 1,
+                success: false,
+                msg: err
+            });
         })
 })
 
