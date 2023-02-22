@@ -36,7 +36,8 @@ router.get('/storage', async (req, res, next) => {
         })
 })
 
-
+// [GET] Available product page -> /api/products/get-products
+// Get available products
 router.get("/get-products", async (req, res, next) => {
     await db.Query(queryString("select", {
         select: "*",

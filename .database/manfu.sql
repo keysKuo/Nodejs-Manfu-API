@@ -139,6 +139,7 @@ select * from __ORDER_DETAIL
 -----------------------------------------------------------
 
 --procedure to increate the priority
+
 --drop trigger TABLE_BILL_HANDLER
 go
 create trigger TABLE_BILL_HANDLER 
