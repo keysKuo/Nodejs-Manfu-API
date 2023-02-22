@@ -8,10 +8,10 @@ const app = require('./config/server').init();
 router(app);
 
 app.get('/', (req, res, next) => {
-    let id = uuid().substring(0,8);
-    return res.status(200).json({id});
+    let id = uuid().substring(0, 8);
+    return res.status(200).json({ id });
 })
 
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 })
