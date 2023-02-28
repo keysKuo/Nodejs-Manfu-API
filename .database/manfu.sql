@@ -28,6 +28,15 @@ create table __STAFF(
 	constraint PK_STAFF primary key (staff_ID)
 )
 
+create table __ACCOUNT(
+	account_ID varchar(10),
+	account_password varchar(10),
+	is_available bit,
+	staff_ID varchar(10),
+
+	constraint FK_ACCOUNT_STAFF foreign key (staff_ID) references __STAFF(staff_ID)
+)
+
 create table __TABLE (
 	table_ID varchar(10),
 	table_seat int,
@@ -97,6 +106,13 @@ select * from __STAFF
 
 --
 
+insert into __ACCOUNT (account_ID, account_password, is_available, staff_ID)
+values ('AC00000001', '123456', 1, 'EMP0000001')
+insert into __ACCOUNT values ('AC00000002', '123456', 0, 'EMP0000002')
+select * from __ACCOUNT
+
+--
+
 --delete from __TABLE
 insert into __TABLE (table_ID, table_seat, is_available, staff_ID) 
 values ('TAB0000001', 4, 0, 'EMP0000003')
@@ -137,8 +153,25 @@ insert into __ORDER_DETAIL values ('OR00000003', 'EX000001', 5, 75000, 'idle', 9
 select * from __ORDER_DETAIL
 
 -----------------------------------------------------------
-
 --procedure to increate the priority
+select * from __ORDER_DETAIL
+
+go
+CREATE PROCEDURE increaseOrderDetailPriority
+AS
+update __ORDER_DETAIL set product_priority = product_priority + 1
+GO;
+--exec increaseOrderDetailPriority
+
+
+go
+CREATE PROCEDURE decreaseOrderDetailPriority
+AS
+update __ORDER_DETAIL set product_priority = product_priority - 1
+go
+--exec decreaseOrderDetailPriority
+
+-----------------------------------------------------------
 
 --drop trigger TABLE_BILL_HANDLER
 go
@@ -159,6 +192,15 @@ begin
 	end
 end
 
+-- list all triggers
+SELECT  
+    name,
+    is_instead_of_trigger
+FROM 
+    sys.triggers  
+WHERE 
+    type = 'TR';
+
 -----------------------------------------------------------
 
 select  OD.*, O.created_at
@@ -167,7 +209,7 @@ where O.order_ID = OD.order_ID
 	and OD.product_status = 'idle'
 order by OD.product_priority desc, O.created_at asc
 
-
+-----------------------------------------------------------
 
 --select * from __BILL
 --select * from __TABLE
