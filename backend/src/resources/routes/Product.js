@@ -80,9 +80,9 @@ router.get('/get-one/:pid', async (req, res, next) => {
         where: `product_id = '${pid}'`
     }))
         .then(records => {
-            if (records.length != 0){
+            if (records.length != 0) {
                 let is_available = records[0].is_available;
-                if(is_available == 1) {
+                if (is_available == 1) {
                     return res.status(200).json({
                         // code: 0,
                         success: true,
@@ -176,6 +176,7 @@ router.put('/update/:pid', async (req, res, next) => {
             return res.status(500).json({ success: false, msg: err });
         })
 })
+
 
 // [PUT] Toggle switch status of a Product -> /api/products/switch-status/:pid
 router.put('/switch-status/:pid', async (req, res, next) => {
