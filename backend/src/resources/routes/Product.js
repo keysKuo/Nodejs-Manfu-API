@@ -183,7 +183,7 @@ router.put('/switch-status/:pid', async (req, res, next) => {
     const { pid } = req.params;
     const { is_available } = req.body;
 
-    let available = (is_available == "true") ? 0 : 1;
+    let available = (is_available == "true") ? 1 : 0;
 
     await db.Execute(queryString('update', {
         table: '__PRODUCT',
@@ -191,7 +191,11 @@ router.put('/switch-status/:pid', async (req, res, next) => {
         where: `product_ID = '${pid}'`
     }))
         .then(() => {
-            return res.status(200).json({ success: true, msg: 'Chỉnh sửa trạng thái thành công', is_available: available });
+            return res.status(200).json({
+                success: true,
+                msg: `Change success for ${pid}`,
+                is_available: available
+            });
         })
         .catch(err => {
             return res.status(500).json({ success: false, err });

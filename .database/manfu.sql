@@ -46,7 +46,7 @@ create table __TABLE (
 
 	constraint PK_TABLE primary key (table_ID),
 	--constraint FK_TABLE_BILL foreign key (bill_ID) references __BILL(bill_ID),
-	constraint FK_TABLE_STAFF foreign key (staff_ID) references __STAFF(staff_ID)
+	--constraint FK_TABLE_STAFF foreign key (staff_ID) references __STAFF(staff_ID)
 )
 
 create table __BILL(
@@ -64,6 +64,7 @@ create table __ORDER (
 	created_at datetime,
 	updated_at datetime,
 	table_ID varchar(10),
+	bill_ID varchar(10), -- NO FK 
 
 	constraint PK_ORDER primary key (order_ID),
 	constraint FK_ORDER_TABLE foreign key (table_ID) references __TABLE(table_ID)
@@ -87,12 +88,13 @@ create table __ORDER_DETAIL (
 --ticket_priority = 10, extra_priority = 9, vegatable_priority = 8
 --buffet_priority = 7-5, alacarte_priority = 4-2
 --so 1-0 are extra
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available) 
-values ('TK000001', N'ticket buffet lẩu','ticket', 500000, 10, 1)
-insert into __PRODUCT values ('EX000001', N'khăn lạnh', 'extra',5000, 9, 1, null)
-insert into __PRODUCT values ('FD000001', N'bò tái','buffet', 50000, 5, 1, null)
-insert into __PRODUCT values ('AL000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
-insert into __PRODUCT values ('AL000002', N'bò xào tam vị', 'alacarte', 35000, 3, 0, null)
+insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available, image_link) 
+values ('TK00000001', N'ticket buffet lẩu','ticket', 500000, 10, 1, null)
+insert into __PRODUCT values ('EX00000001', N'khăn lạnh', 'extra',5000, 9, 1, null)
+insert into __PRODUCT values ('FD00000001', N'bò tái','buffet', 50000, 5, 1, null)
+insert into __PRODUCT values ('AL00000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
+insert into __PRODUCT values ('AL00000002', N'bò xào tam vị', 'alacarte', 35000, 3, 0, null)
+select * from __PRODUCT
 
 --
 
@@ -116,40 +118,43 @@ select * from __ACCOUNT
 --delete from __TABLE
 insert into __TABLE (table_ID, table_seat, is_available, staff_ID) 
 values ('TAB0000001', 4, 0, 'EMP0000003')
-insert into __TABLE values ('TAB0000002', 8, 1, 'EMP0000003')
-insert into __TABLE values ('TAB0000003', 10, 1, 'EMP0000003')
+insert into __TABLE values ('TAB0000002', 8, 1, null)
+insert into __TABLE values ('TAB0000003', 10, 1, null)
 select * from __TABLE
+--delete from __TABLE where table_ID = 'TAB0000004'
+select * from __TABLE where staff_ID is NULL
 
 --
 
-insert into __BILL (bill_ID, total_price, created_at, table_id) 
-values ('BIL0000001', 0, GETDATE(), 'TAB0000001')
-insert into __BILL values ('BIL0000002', 0, GETDATE(), 'TAB0000002')
-insert into __BILL values ('BIL0000003', 0, GETDATE(), 'TAB0000003')
+-- not yet
+--insert into __BILL (bill_ID, total_price, created_at, table_id) 
+--values ('BIL0000001', 0, GETDATE(), 'TAB0000001')
+--insert into __BILL values ('BIL0000002', 0, GETDATE(), 'TAB0000002')
+--insert into __BILL values ('BIL0000003', 0, GETDATE(), 'TAB0000003')
 
 --
 
 --delete from __ORDER
-insert into __ORDER (order_ID, created_at, updated_at, table_ID) 
-values ('OR00000001', GETDATE(), null, 'TAB0000001')
-insert into __ORDER values ('OR00000002', GETDATE(), null, 'TAB0000001')
-insert into __ORDER values ('OR00000003', GETDATE(), null, 'TAB0000001')
+insert into __ORDER (order_ID, created_at, updated_at, table_ID, bill_ID) 
+values ('OR00000001', GETDATE(), null, 'TAB0000001', null)
+insert into __ORDER values ('OR00000002', GETDATE(), null, 'TAB0000001', null)
+insert into __ORDER values ('OR00000003', GETDATE(), null, 'TAB0000001', null)
 select * from __ORDER
 
 --
 
 --delete from __ORDER_DETAIL
 insert into __ORDER_DETAIL (order_ID, product_ID, quantity, price, product_status, product_priority) 
-values ('OR00000001', 'AL000001', 5, 75000, 'idle', 4)
-insert into __ORDER_DETAIL values ('OR00000001', 'TK000001', 1, 500000, 'success', 10)
+values ('OR00000001', 'AL00000001', 5, 75000, 'idle', 4)
+insert into __ORDER_DETAIL values ('OR00000001', 'TK00000001', 1, 500000, 'success', 10)
 
-insert into __ORDER_DETAIL values ('OR00000002', 'TK000001', 2, 500000, 'success', 10)
-insert into __ORDER_DETAIL values ('OR00000002', 'AL000001', 5, 75000, 'idle', 4)
-insert into __ORDER_DETAIL values ('OR00000002', 'FD000001', 5, 75000, 'idle', 5)
+insert into __ORDER_DETAIL values ('OR00000002', 'TK00000001', 2, 500000, 'success', 10)
+insert into __ORDER_DETAIL values ('OR00000002', 'AL00000001', 5, 75000, 'idle', 4)
+insert into __ORDER_DETAIL values ('OR00000002', 'FD00000001', 5, 75000, 'idle', 5)
 
-insert into __ORDER_DETAIL values ('OR00000003', 'TK000001', 3, 500000, 'success', 10)
-insert into __ORDER_DETAIL values ('OR00000003', 'FD000001', 5, 75000, 'idle', 6)
-insert into __ORDER_DETAIL values ('OR00000003', 'EX000001', 5, 75000, 'idle', 9)
+insert into __ORDER_DETAIL values ('OR00000003', 'TK00000001', 3, 500000, 'success', 10)
+insert into __ORDER_DETAIL values ('OR00000003', 'FD00000001', 5, 75000, 'idle', 6)
+insert into __ORDER_DETAIL values ('OR00000003', 'EX00000001', 5, 75000, 'idle', 9)
 select * from __ORDER_DETAIL
 
 -----------------------------------------------------------
@@ -181,13 +186,13 @@ for insert
 as 
 begin
 	declare @table_id_inserted varchar(10)
-	declare @status int
+	declare @available int
 	
 	select @table_id_inserted = table_id from inserted
-	select @status = __TABLE.is_available from __TABLE where __TABLE.table_ID = @table_id_inserted
-	if(@status = 0)
+	select @available = __TABLE.is_available from __TABLE where __TABLE.table_ID = @table_id_inserted
+	if(@available = 1)
 	begin
-		print N'BÀN ĐÃ CÓ BILL RỒI'
+		print N'BÀN KHÔNG CÓ NGƯỜI, KHÔNG TẠO ĐƯỢC BILL'
 		rollback tran
 	end
 end
@@ -203,6 +208,7 @@ WHERE
 
 -----------------------------------------------------------
 
+-- for the chefs
 select  OD.*, O.created_at
 from __ORDER_DETAIL OD, __ORDER O
 where O.order_ID = OD.order_ID 
@@ -210,6 +216,8 @@ where O.order_ID = OD.order_ID
 order by OD.product_priority desc, O.created_at asc
 
 -----------------------------------------------------------
+
+--cancel all order when create bill
 
 --select * from __BILL
 --select * from __TABLE
