@@ -218,6 +218,10 @@ order by OD.product_priority desc, O.created_at asc
 -----------------------------------------------------------
 
 --cancel all order when create bill
+--should add the comment section on each order
+
+-----------------------------------------------------------
+
 
 --select * from __BILL
 --select * from __TABLE
