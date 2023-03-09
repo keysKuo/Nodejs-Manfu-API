@@ -1,10 +1,16 @@
+require("dotenv").config();
 const router = require('express').Router();
 const db = require("../../config/db/database");
 const { queryString } = require('../middlewares');
 const { statusCheck, procedureQueryString } = require('../middlewares/index2');
 const { uuid } = require('uuidv4');
+const { default: fetch } = require('node-fetch');
+const { json } = require("body-parser");
+const { response } = require("express");
+const API_URL = process.env.API_URL;
 
 
+// [GET] Get list of bill page -> /api/bills/get-bills
 router.get('/get-bills', async (req, res, next) => {
     await db.Query(queryString("select", {
         select: "*",
@@ -34,9 +40,13 @@ router.get('/get-bills', async (req, res, next) => {
 })
 
 
-
+// [POST] Create bill page -> /api/bills/create-bill
+// {
+//     "table_ID": "TAB0000001",
+//     "staff_ID": "EMP0000003"
+//   }
 router.post("/create-bill", async (req, res, next) => {
-    const { table_ID } = req.body
+    const { table_ID, staff_ID } = req.body
     let bill_ID = "B" + uuid().substring(0, 9) // create bill_ID
 
     // update/add bill_ID for __ORDER
@@ -72,6 +82,7 @@ router.post("/create-bill", async (req, res, next) => {
             console.log(err)
         })
 
+    // get list of order after updated
     let result
     await db.Query(`select OD.*, P.product_category
                         from __ORDER O, __ORDER_DETAIL OD, __PRODUCT P
@@ -108,7 +119,6 @@ router.post("/create-bill", async (req, res, next) => {
             }
         }
     });
-
     let total_price = ticket + alacarte + extra
     await db.Execute(queryString("insert", {
         table: "__BILL",
@@ -124,7 +134,31 @@ router.post("/create-bill", async (req, res, next) => {
             })
         })
 
-    // need to add switch status table
+    // need to add switch status table, using fetch
+    await fetch(API_URL + `tables/switch-available-status/${table_ID}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            staff_ID: staff_ID,
+            is_available: true,
+        })
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data.success)
+            console.log(data.message)
+            console.log(data.is_available)
+        })
+        .catch(err => {
+            return res.status(500).json({
+                success: false,
+                message: err
+            })
+        })
 
     return res.status(200).json({
         message: `${bill_ID} was added at ${new Date().toISOString()}`,
