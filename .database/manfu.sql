@@ -140,6 +140,7 @@ values ('OR00000001', GETDATE(), null, 'TAB0000001', null)
 insert into __ORDER values ('OR00000002', GETDATE(), null, 'TAB0000001', null)
 insert into __ORDER values ('OR00000003', GETDATE(), null, 'TAB0000001', null)
 select * from __ORDER
+--delete from __ORDER where order_ID = 'OR68b4a307'
 
 --
 
@@ -156,23 +157,32 @@ insert into __ORDER_DETAIL values ('OR00000003', 'TK00000001', 3, 500000, 'succe
 insert into __ORDER_DETAIL values ('OR00000003', 'FD00000001', 5, 75000, 'idle', 6)
 insert into __ORDER_DETAIL values ('OR00000003', 'EX00000001', 5, 75000, 'idle', 9)
 select * from __ORDER_DETAIL
+--update __ORDER_DETAIL set product_status = 'idle' where order_ID = 'OR00000002' and product_ID = 'AL00000001'
+--update __ORDER_DETAIL set product_status = 'idle' where order_ID = 'OR00000002' and product_ID = ''
+--delete from __ORDER_DETAIL where order_ID = 'OR68b4a307'
 
 -----------------------------------------------------------
 --procedure to increate the priority
 select * from __ORDER_DETAIL
 
 go
+--drop proc increaseOrderDetailPriority
 CREATE PROCEDURE increaseOrderDetailPriority
 AS
-update __ORDER_DETAIL set product_priority = product_priority + 1
+update __ORDER_DETAIL 
+set product_priority = product_priority + 1
+where product_status != 'success' and product_status != 'cancel'
 GO;
 --exec increaseOrderDetailPriority
 
 
 go
+--drop proc decreaseOrderDetailPriority
 CREATE PROCEDURE decreaseOrderDetailPriority
 AS
-update __ORDER_DETAIL set product_priority = product_priority - 1
+update __ORDER_DETAIL 
+set product_priority = product_priority - 1
+where product_status != 'success' and product_status != 'cancel'
 go
 --exec decreaseOrderDetailPriority
 
@@ -209,7 +219,7 @@ WHERE
 -----------------------------------------------------------
 
 -- for the chefs
-select  OD.*, O.created_at
+select  OD.*, O.table_ID, O.created_at
 from __ORDER_DETAIL OD, __ORDER O
 where O.order_ID = OD.order_ID 
 	and OD.product_status = 'idle'
