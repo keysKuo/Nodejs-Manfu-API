@@ -140,7 +140,7 @@ values ('OR00000001', GETDATE(), null, 'TAB0000001', null)
 insert into __ORDER values ('OR00000002', GETDATE(), null, 'TAB0000001', null)
 insert into __ORDER values ('OR00000003', GETDATE(), null, 'TAB0000001', null)
 select * from __ORDER
---delete from __ORDER where order_ID = 'OR68b4a307'
+--delete from __ORDER where order_ID = 'ORe28be452'
 
 --
 
@@ -159,7 +159,7 @@ insert into __ORDER_DETAIL values ('OR00000003', 'EX00000001', 5, 75000, 'idle',
 select * from __ORDER_DETAIL
 --update __ORDER_DETAIL set product_status = 'idle' where order_ID = 'OR00000002' and product_ID = 'AL00000001'
 --update __ORDER_DETAIL set product_status = 'idle' where order_ID = 'OR00000002' and product_ID = ''
---delete from __ORDER_DETAIL where order_ID = 'OR68b4a307'
+--delete from __ORDER_DETAIL where order_ID = 'ORe28be452'
 
 -----------------------------------------------------------
 --procedure to increate the priority
@@ -231,8 +231,67 @@ order by OD.product_priority desc, O.created_at asc
 --should add the comment section on each order
 
 -----------------------------------------------------------
+select * 
+from __ORDER O
+where O.table_ID = 'TAB0000001' and O.bill_ID is null       
+
+insert into __ORDER values ('OR00000000', GETDATE(), null, 'TAB0000002', null)
+insert into __ORDER_DETAIL values ('OR00000000', 'EX00000001', 5, 75000, 'idle', 9)
+select *
+from __ORDER O, __ORDER_DETAIL OD
+where O.order_ID = OD.order_ID and O.order_ID = 'OR00000000'
+
+--important
+update 
+	table_a
+set
+	table_a.product_status = 'cancel'
+from
+	__ORDER_DETAIL as table_a
+	inner join (select *
+				from __ORDER O
+				where O.table_ID = 'TAB0000001') as table_b
+		on table_a.order_ID = table_b.order_ID
+where table_a.product_status = 'idle'
 
 
+--important
+select OD.*, P.product_category
+from __ORDER O, __ORDER_DETAIL OD, __PRODUCT P
+where O.order_ID = OD.order_ID
+	and OD.product_ID = P.product_ID
+	and O.table_ID = 'TAB0000001'
+
+
+--update __ORDER_DETAIL
+--set product_status = 'success'
+--where exists
+--(
+--	select OD.*
+--	from __ORDER_DETAIL OD
+--	where exists(
+--		select *
+--		from __ORDER O
+--		where O.table_ID = 'TAB0000001' --and O.bill_ID = ''
+--			and O.order_ID = OD.order_ID
+--			and OD.product_status = 'idle'
+--	)
+--)
+select * from __ORDER_DETAIL
+update __ORDER_DETAIL 
+set product_status = 'idle'
+update __ORDER_DETAIL 
+set product_status = 'success'
+where product_ID = 'TK00000001'
+update __ORDER_DETAIL
+set product_status = 'success'
+where order_ID = 'OR00000003' and product_ID = 'EX00000001'
+
+
+select * from __ORDER
+update __ORDER
+set bill_ID = NULL
+where bill_ID = 'Bf1fda2d4-'
 --select * from __BILL
 --select * from __TABLE
 

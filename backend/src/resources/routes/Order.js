@@ -233,5 +233,3 @@ router.post('/create-order', async (req, res, next) => {
 
 module.exports = router
 
-
-// get order_detail based on order
