@@ -291,9 +291,11 @@ where order_ID = 'OR00000003' and product_ID = 'EX00000001'
 select * from __ORDER
 update __ORDER
 set bill_ID = NULL
-where bill_ID = 'Bf1fda2d4-'
---select * from __BILL
---select * from __TABLE
+where bill_ID = 'B908f4cc9-'
+
+
+select * from __BILL
+select * from __TABLE
 
 --insert into __BILL values ('BIL0000004', 0, GETDATE(), 'TAB0000001')
 
