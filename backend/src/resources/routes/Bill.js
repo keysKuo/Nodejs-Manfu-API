@@ -145,14 +145,17 @@ router.post("/create-bill", async (req, res, next) => {
             is_available: true,
         })
     })
-        .then((response) => {
-            return response.json()
-        })
-        .then((data) => {
+        .then(async (response) => {
+            let data = await response.json()
             console.log(data.success)
             console.log(data.message)
             console.log(data.is_available)
         })
+        // .then((data) => {
+        //     console.log(data.success)
+        //     console.log(data.message)
+        //     console.log(data.is_available)
+        // })
         .catch(err => {
             return res.status(500).json({
                 success: false,

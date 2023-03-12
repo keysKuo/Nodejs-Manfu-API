@@ -291,7 +291,7 @@ where order_ID = 'OR00000003' and product_ID = 'EX00000001'
 select * from __ORDER
 update __ORDER
 set bill_ID = NULL
-where bill_ID = 'Bed18d973-'
+where bill_ID = 'Bebf95532-'
 
 
 select * from __BILL
