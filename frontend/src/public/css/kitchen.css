@@ -1,0 +1,135 @@
+@import "https://unpkg.com/open-props";
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:focus {
+  position: relative;
+  z-index: var(--layer-1);
+  outline: 2px solid var(--orange-9);
+  outline-offset: 0.2em;
+}
+
+:root {
+  --white: hsl(0, 0%, 100%);
+}
+
+button {
+  font: inherit;
+}
+
+.page {
+  color: var(--gray-9);
+  background-color: var(--gray-0);
+  display: grid;
+  grid-template-areas: "main";
+  min-height: 100vh;
+  font-family: var(--font-sans);
+}
+.page__main {
+  grid-area: main;
+}
+
+.main {
+  display: grid;
+  place-items: center;
+  padding: var(--size-4);
+}
+.main__form {
+  max-width: 40em;
+}
+
+.form {
+  width: 100%;
+  display: grid;
+  gap: var(--size-3);
+}
+.form__list {
+  color: var(--gray-7);
+  display: grid;
+  list-style: none;
+}
+.form__item {
+  --this__item_bd-cr: var(--gray-2);
+  background-color: var(--this__item_bd-cr);
+  border: 2px solid var(--gray-5);
+  margin-top: -1px;
+  margin-bottom: 10px;
+  max-height: 105px;
+}
+.form__item:hover {
+  --this__item_bd-cr: var(--gray-3);
+}
+.form__item_hidden {
+  display: none;
+}
+.form__link {
+  color: inherit;
+  position: relative;
+  display: block;
+  padding: var(--size-3);
+  text-decoration: 0;
+}
+
+.search-box {
+  position: relative;
+  color: var(--gray-5);
+  background-color: var(--white);
+  height: 3em;
+  border: 1px solid;
+  border-radius: var(--radius-2);
+  font-size: 1em;
+}
+.search-box__input {
+  color: var(--gray-7);
+  background-color: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  padding-right: 1.2em;
+  padding-left: 2em;
+  font-size: 1em;
+}
+.search-box__icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 0.5em;
+  z-index: var(--layer-2);
+}
+
+.inline__block {
+    display: inline-block;
+}
+
+#formList .img-box {
+    padding: var(--size-2);
+    width: 15%;
+    
+}
+
+#formList .info-box {
+    width: 60%;
+    /* border: 1px solid black; */
+    padding: var(--size-2);
+    height: 80%;
+}
+
+#formList .check-box {
+    width: 17%;
+    /* border: 1px solid black; */
+    padding: var(--size-2);
+    height: 80%;
+}
+
+p {
+    margin-bottom:  0 !important;
+}

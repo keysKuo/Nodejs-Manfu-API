@@ -1,0 +1,133 @@
+<link rel="stylesheet" href="/css/kitchen.css">
+<main class="main page__main">
+    <form class="form main__form" id="mainForm" action="javascript:void(0);" method="GET">
+      <label class="search-box" for="search">
+        <span class="sr-only">Search</span>
+        <i class="search-box__icon fa-solid fa-search"></i>
+        <input class="search-box__input" id="search" type="text" name="search" placeholder="Tìm kiếm ..."/>
+      </label>
+      
+        <ul id="formList" class="form__list">
+            <li class="form__item">
+                <div class="img-box inline__block">
+                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                         <p style="visibility: hidden;">...</p>
+                    </div>
+                    <div class="info-box inline__block">
+                        {{!-- <p style="visibility: hidden;">...</p> --}}
+                        <p><b>Món: </b>Sườn xào chua ngọt</p>
+                        <p><b>Bàn số: </b>1</p>
+                        <p><b>Order lúc: </b>5:30 PM</p>
+                        <p style="visibility: hidden;">...</p>
+   
+                    </div>
+                    <div class="check-box inline__block">
+                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
+                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
+                        <p style="visibility: hidden;">...</p>
+                    </div>
+               
+            </li>
+            <li class="form__item">
+                <div class="img-box inline__block">
+                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                         <p style="visibility: hidden;">...</p>
+                    </div>
+                    <div class="info-box inline__block">
+                        {{!-- <p style="visibility: hidden;">...</p> --}}
+                        <p><b>Món: </b>Sườn xào chua ngọt</p>
+                        <p><b>Bàn số: </b>3</p>
+                        <p><b>Order lúc: </b>5:30 PM</p>
+                        <p style="visibility: hidden;">...</p>
+   
+                    </div>
+                    <div class="check-box inline__block">
+                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
+                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
+                        <p style="visibility: hidden;">...</p>
+                    </div>
+               
+            </li>
+            <li class="form__item">
+                <div class="img-box inline__block">
+                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                         <p style="visibility: hidden;">...</p>
+                    </div>
+                    <div class="info-box inline__block">
+                        {{!-- <p style="visibility: hidden;">...</p> --}}
+                        <p><b>Món: </b>Sườn xào cay ngọt</p>
+                        <p><b>Bàn số: </b>3</p>
+                        <p><b>Order lúc: </b>5:30 PM</p>
+                        <p style="visibility: hidden;">...</p>
+   
+                    </div>
+                    <div class="check-box inline__block">
+                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
+                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
+                        <p style="visibility: hidden;">...</p>
+                    </div>
+               
+            </li>
+            <li class="form__item">
+                <div class="img-box inline__block">
+                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                         <p style="visibility: hidden;">...</p>
+                    </div>
+                    <div class="info-box inline__block">
+                        {{!-- <p style="visibility: hidden;">...</p> --}}
+                        <p><b>Món: </b>Cơm xào chua ngọt</p>
+                        <p><b>Bàn số: </b>3</p>
+                        <p><b>Order lúc: </b>5:30 PM</p>
+                        <p style="visibility: hidden;">...</p>
+   
+                    </div>
+                    <div class="check-box inline__block">
+                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
+                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
+                        <p style="visibility: hidden;">...</p>
+                    </div>
+               
+            </li>
+            
+            
+            
+        </ul>
+
+    </form>
+  </main>
+
+<script>
+search.addEventListener("keyup", filterData);
+
+function filterData() {
+  const val = this.value.toLowerCase();
+  
+  for (li of formList.children) {
+    const target1 = li.children[1].children[0].textContent.split('Món: ')[1].toLowerCase();
+    const target2 = li.children[1].children[1].textContent.split('Bàn số: ')[1].toLowerCase();
+    
+    (removeAscent(target1).includes(removeAscent(val)) || target2.includes(val))
+      ? li.classList.remove("form__item_hidden")
+      : li.classList.add("form__item_hidden");
+  }
+  
+  return val;
+}
+
+function removeAscent (str) {
+  if (str === null || str === undefined) return str;
+  str = str.toLowerCase();
+  str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+  str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+  str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+  str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+  str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+  str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+  str = str.replace(/đ/g, "d");
+  return str;
+}
+</script>

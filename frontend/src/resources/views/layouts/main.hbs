@@ -1,0 +1,129 @@
+<html lang="en">
+    <head>
+        <meta charset='UTF-8' />
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <link rel='icon' href='/images/cropped-logo-hh-nen-den-192x192.png' sizes='192x192' />
+        <link rel='apple-touch-icon' href='/images/cropped-logo-hh-nen-den-180x180.png' />
+        <meta name='msapplication-TileImage' content='/images/cropped-logo-hh-nen-den-270x270.png' />
+        {{! SEO }}
+        <meta name='description' content='{{meta.desc}}' />
+        <meta name='keywords' content='{{meta.keywords}}' />
+        <meta name='author' content='' />
+        <link rel='canonical' href='{{urlcanonical}}' />
+        <meta name='robots' content='INDEX, FOLLOW' />
+        <meta property='og:site_name' content='http://localhost:81/lavarel%208/shop-vincent/' />
+        <meta property='og:description' content='{{meta.desc}}' />
+        <meta property='og:title' content='{{meta.title}}' />
+        <meta property='og:url' content='{{urlcanonical}}' />
+        <meta property='og:type' content='website' />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <title>Manfu</title>
+        {{!-- {{> style}} --}}
+    </head>
+
+    <body class='{{template}}'>
+        {{!-- {{>header}} --}}
+        <div class='container-fluid' style='margin-top:200px'>
+            {{{body}}}
+        </div>
+        {{!-- {{> footer}}
+
+        <div class='hotline-phone-ring-wrap'>
+            <div class='hotline-phone-ring'>
+                <div class='hotline-phone-ring-circle'>
+                </div>
+                <div class='hotline-phone-ring-circle-fill'>
+
+                </div>
+                <div class='hotline-phone-ring-img-circle'>
+                    <a href='tel:1900866816' class='pps-btn-img'>
+                        <img
+                            src='https://nocodebuilding.com/wp-content/uploads/2020/07/icon-call-nh.png'
+                            alt='Gọi điện thoại'
+                            width='50'
+                        />
+                    </a>
+                </div>
+            </div>
+            <div class='hotline-bar'>
+                <a href='tel:1900866816'>
+                    <span class='text-hotline'>1900 86 68 16</span>
+                </a>
+            </div>
+        </div>
+
+        <div class='social-button'>
+            <div class='social-button-content'>
+                <a
+                    href='https://www.google.com/maps?cid=11697360873315666848&_ga=2.17672761.1404569557.1629693184-750772528.1620044073&gidzl=-1kyF2idwXhy0xmwBZpZ7ly0iJumFh8GibApCMPeua7bLkPbOJwsIh06ucqrEE4Uum7WFJVX2cSMA23Y7G'
+                    target='_blank'
+                    class='maps'
+                >
+                    <img src='/images/logo-google-map.png' alt='HH Maps' />
+                </a>
+                <a href='https://www.facebook.com/donoithattancodienhh/' target='_blank' class='mes'>
+                    <img src='https://nocodebuilding.com/wp-content/uploads/2020/07/fb.png' alt='Chat Messenger' />
+                </a>
+
+                <button onclick='myFunction()' style='background:rgba(255, 0, 0, 0);padding:0px; border:none'>
+                    <img
+                        class='zalo'
+                        src='https://nocodebuilding.com/wp-content/uploads/2020/07/zl.png'
+                        alt='Chat Zalo'
+                    />
+                </button>
+                <div id='hide'>
+                    <!--<p style ="color:white;padding:10px; font-size:10px;margin:0px;padding:2px;">
+                        <i class="fas fa-phone-alt" style="background:rgba(0,0,0,0);">
+                    </i>HOTLINE ĐẶT HÀNG</p>-->
+                    <a href='http://zalo.me/0914479004' target='_blank'>Mr Đức 0914 479 004</a>
+                    <a href='http://zalo.me/0943355005' target='_blank'>Ms Thắm 0943 355 005</a>
+                    <a href='http://zalo.me/0949937007' target='_blank'>Mr Hậu 0949 937 007</a>
+                    <a href='http://zalo.me/0902627008' target='_blank'>Ms Duyên 0902 627 008</a>
+                    <a href='http://zalo.me/0967535357' target='_blank'>Mrs Thi 0967 5353 57</a>
+
+                </div>
+            </div>
+        </div>
+        {{> ModalTuVan}}
+        
+        <a
+            href='#'
+            onclick='topFunction()'
+            id='back-to-top'
+            class='btn btn-icon btn-primary back-to-top mt-2'
+            style='display: block;'
+        >
+            <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+                class='feather feather-arrow-up icons'
+            >
+                <line x1='12' y1='19' x2='12' y2='5'>
+
+                </line>
+                <polyline points='5 12 12 5 19 12'>
+
+                </polyline>
+            </svg>
+        </a>
+        <script>
+            function myFunction() { var x = document.getElementById("hide"); if (x.style.display === "inline-grid") {
+            x.style.display = "none"; } else { x.style.display = "inline-grid"; } } function topFunction() {
+            document.body.scrollTop = 0; document.documentElement.scrollTop = 0; }
+        </script>
+        {{> script}} --}}
+    </body>
+</html>
