@@ -36,14 +36,15 @@ router.get('/storage', async (req, res, next) => {
         })
 })
 
-// [GET] Available product page -> /api/products/get-products
-// Get available products
-router.get("/get-products", async (req, res, next) => {
+// [GET] Get Product list page by Target -> /api/products/get-products/:target
+router.get("/get-products/:target", async (req, res, next) => {
+    const { target } = req.params;
+    let optional = target == 'kitchen' ? '' : "where is_available = 1 order by product_ID asc, product_priority desc";
     await db.Query(queryString("select", {
         select: "*",
         table: "__PRODUCT",
         // đoạn string tiếp theo
-        optional: "where is_available = 1 order by product_ID asc, product_priority desc"
+        optional: optional
     }))
         .then(data => {
             if (data.length != 0) {

@@ -185,27 +185,31 @@ router.post('/update-product/:pid', upload.single('pimg'), async (req, res, next
 router.get('/preview-product/:pid', async (req, res, next) => {
     const { pid } = req.params;
 
-    await fetch(API_URL + `/products/getOne/${pid}`, {
+    await fetch(API_URL + `/products/get-one/${pid}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
     .then(async result => {
-        let data = await result.json();
+        result = await result.json();
 
-        return res.render('pages/products/preview', {
-            layout: 'admin',
-            pageName: 'Preview sản phẩm',
-            data: {
-                pid: data.product_ID,
-                pname: data.product_name,
-                pimg: data.image_link,
-                category: data.product_category,
-                price: data.product_price,
-                priority: data.product_priority,
-            },
-            success: req.flash('success') || '',
-            error: req.flash('error') || ''
-        })
+        if (result.success) {
+            let data = result.data;
+            return res.render('pages/products/preview', {
+                layout: 'admin',
+                pageName: 'Preview sản phẩm',
+                data: {
+                    pid: data.product_ID,
+                    pname: data.product_name,
+                    pimg: data.image_link,
+                    category: data.product_category,
+                    price: data.product_price,
+                    priority: data.product_priority,
+                },
+                success: req.flash('success') || '',
+                error: req.flash('error') || ''
+            })
+        }
+        
     })
     .catch(err => {
         req.flash('error', 'Không tìm thấy thông tin sản phẩm này');

@@ -1,5 +1,5 @@
 ﻿create database manfu
---drop database manfu
+drop database manfu
 use manfu
 
 -----------------------------------------------------------
@@ -23,13 +23,13 @@ create table __STAFF(
 	join_date datetime,
 	roles varchar(255) check (roles in ('chef', 'staff', 'manager', 'admin')),
 	image_link varchar(255) null,
-	password varchar(255) null,
+	
 	is_available BIT,
 	constraint PK_STAFF primary key (staff_ID)
 )
 
 create table __ACCOUNT(
-	account_ID varchar(10),
+	account_ID varchar(10) Primary key,
 	account_password varchar(10),
 	is_available bit,
 	staff_ID varchar(10),
@@ -100,10 +100,10 @@ select * from __PRODUCT
 
 insert into __STAFF (staff_ID, staff_name, join_date, roles, is_available) 
 values ('EMP0000001', N'Nguyên Văn A', getdate(), 'admin', 1)
-insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, null, 1)
-insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, null, 1)
-insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, null, 0)
-insert into __STAFF values ('EMP0000005', N'Nguyên Văn E', getdate(), 'chef', null, null, 1)
+insert into __STAFF values ('EMP0000002', N'Nguyên Văn B', getdate(), 'manager', null, 1)
+insert into __STAFF values ('EMP0000003', N'Nguyên Văn C', getdate(), 'staff', null, 1)
+insert into __STAFF values ('EMP0000004', N'Nguyên Văn D', getdate(), 'chef', null, 0)
+insert into __STAFF values ('EMP0000005', N'Nguyên Văn E', getdate(), 'chef', null, 1)
 select * from __STAFF
 
 --
@@ -111,7 +111,7 @@ select * from __STAFF
 insert into __ACCOUNT (account_ID, account_password, is_available, staff_ID)
 values ('AC00000001', '123456', 1, 'EMP0000001')
 insert into __ACCOUNT values ('AC00000002', '123456', 0, 'EMP0000002')
-select * from __ACCOUNT
+--delete from __ACCOUNT
 
 --
 
