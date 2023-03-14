@@ -5,7 +5,6 @@ const { uuid } = require('uuidv4');
 const { query } = require('express');
 
 // [GET] All tables page -> /api/tables/get-tables
-// Get all the tables
 router.get("/get-tables", async (req, res, next) => {
     await db.Query(queryString("select",
         {
@@ -36,19 +35,34 @@ router.get("/get-tables", async (req, res, next) => {
         })
 })
 
-// [GET] All available tables page -> /api/tables/get-tables/available
-router.get("/get-tables/available", async (req, res, next) => {
+
+// [GET] All tables page based on status -> /api/tables/get-tables/:status
+router.get("/get-tables/:status", async (req, res, next) => {
+    const { status } = req.params
+    let is_available = 1
+    if (status == 'available') {
+        is_available = 1
+    }
+    else if (status == 'unavailable') {
+        is_available = 0
+    }
+    else {
+        return res.status(500).json({
+            success: false,
+            message: "Invalid status input"
+        })
+    }
     await db.Query(queryString("select",
         {
             select: "*",
             table: "__TABLE",
-            optional: "where is_available = 1 order by table_ID desc"
+            optional: `where is_available = ${is_available} order by table_ID desc`
         }))
         .then(data => {
             if (data.length != 0) {
                 return res.status(200).json({
                     success: true,
-                    message: "List all available table(s)",
+                    message: `List all ${status} table(s)`,
                     data: data
                 })
             }
@@ -66,38 +80,6 @@ router.get("/get-tables/available", async (req, res, next) => {
             })
         })
 })
-
-
-// [GET] All unavailable tables page -> /api/tables/get-tables/unavailable
-router.get("/get-tables/unavailable", async (req, res, next) => {
-    await db.Query(queryString("select",
-        {
-            select: "*",
-            table: "__TABLE",
-            optional: "where is_available = 0 order by table_ID desc"
-        }))
-        .then(data => {
-            if (data.length != 0) {
-                return res.status(200).json({
-                    success: true,
-                    message: "List all unavailable table(s)",
-                    data: data
-                })
-            }
-            else {
-                return res.status(404).json({
-                    success: true,
-                    message: "List is empty"
-                })
-            }
-        })
-        .catch(err => {
-            return res.status(500).json({
-                success: false,
-                message: err
-            })
-        })
-});
 
 
 // [GET] Table page by ID -> /api/tables/get-table/:tid
@@ -221,23 +203,6 @@ router.delete('/delete/:tid', async (req, res, next) => {
         })
 })
 
-// demo
-// router.post("/demo-get", (req, res, next) => {
-//     let { success, message, data } = req.body
-//     // console.log(data)
-//     if (data.length != 0) {
-//         console.log(data)
-//         console.log(data.length)
-//         return res.status(200).json({
-//             message: "OK"
-//         })
-//     }
-//     else {
-//         return res.status(400).json({
-//             message: "NOT OK"
-//         })
-//     }
-// })
 
 
 // [PUT] Update table page -> /api/tables/update/:tid
