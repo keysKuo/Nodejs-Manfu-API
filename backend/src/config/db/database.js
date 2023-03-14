@@ -13,7 +13,6 @@ var config = {
 }
 
 module.exports.Query = (sSQL) => {
-    console.log(sql_machine)
     return new Promise((resolve, reject) => {
         sql.connect(config, err => {
             if (err)

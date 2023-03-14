@@ -13,31 +13,33 @@ router.get('/storage-product', async (req, res, next) => {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
-    .then(result => {
-        return result.json();
-    })
-    .then(data => {
-        let products = data.map(d => {
-            return {
-                pid: d.product_ID,
-                pname: d.product_name,
-                pimg: d.image_link,
-                category: d.product_category,
-                price: d.product_price,
-                priority: d.product_priority,
-                is_available: d.is_available == 1
-            }
-        })
-
-        
-        return res.render('pages/products/storage', {
-            layout: 'admin',
-            success: req.flash('success') || '',
-            error: req.flash('error') || '' ,
-            products: products
-        })
-    })
+    .then(async (result) => {
+        result = await result.json();
+        if (result.success) {
+            let data = result.data;
+            let products = data.map(d => {
+                return {
+                    pid: d.product_ID,
+                    pname: d.product_name,
+                    pimg: d.image_link,
+                    category: d.product_category,
+                    price: d.product_price,
+                    priority: d.product_priority,
+                    is_available: d.is_available == 1
+                }
+            })
     
+            
+            return res.render('pages/products/storage', {
+                layout: 'admin',
+                success: req.flash('success') || '',
+                error: req.flash('error') || '' ,
+                products: products
+            })
+        }
+    }).catch(err => {
+        return res.status(500).json({err});
+    })
 })
 
 // [GET] Create product -> /admin/create-product
@@ -224,7 +226,7 @@ router.get('/status-product/:pid/:is_available', async (req, res, next) => {
     })
     .then(async result => {
         result = await result.json();
-
+        
         return res.redirect('/admin/storage-product');
     })
     .catch(err => {

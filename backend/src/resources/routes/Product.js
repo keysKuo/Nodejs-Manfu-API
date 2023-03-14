@@ -182,9 +182,9 @@ router.put('/update/:pid', async (req, res, next) => {
 router.put('/switch-status/:pid', async (req, res, next) => {
     const { pid } = req.params;
     const { is_available } = req.body;
-
-    let available = (is_available == "true") ? 1 : 0;
-
+    
+    let available = (is_available == "true") ? 0 : 1;
+    
     await db.Execute(queryString('update', {
         table: '__PRODUCT',
         set: `is_available = ${available}`,

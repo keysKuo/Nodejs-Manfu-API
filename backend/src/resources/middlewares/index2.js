@@ -40,5 +40,6 @@ module.exports = {
 
     endline: function () {
         return "This is end line for index2.js"
-    }
+    },
+
 };
