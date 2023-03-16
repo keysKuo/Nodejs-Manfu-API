@@ -7,12 +7,10 @@ const { uuid } = require('uuidv4');
 
 // [GET] All orders page -> /api/orders/get-orders
 router.get('/get-orders', async (req, res, next) => {
-    await db.Query(queryString("select", {
-        select: "OD.*, O.table_ID, O.created_at",
-        table: "__ORDER_DETAIL OD, __ORDER O",
-        optional: `where O.order_ID = OD.order_ID 
-                    order by OD.product_priority desc, O.created_at asc`
-    }))
+    await db.CallFunc({
+        function: 'FN_REFRESH_ORDER_QUEUE()',
+        optional: 'Order by order_priority desc, created_at'
+    })
         .then(data => {
             if (data.length != 0) {
                 return res.status(200).json({

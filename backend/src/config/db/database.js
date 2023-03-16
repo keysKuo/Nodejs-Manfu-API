@@ -13,40 +13,46 @@ var config = {
 }
 
 module.exports.Query = (sSQL) => {
-    return new Promise((resolve, reject) => {
-        sql.connect(config, err => {
-            if (err)
-                return reject(err);
-
-            var request = new sql.Request();
-            request.query(sSQL, (err, records) => {
-                if (err)
-                    return reject(err);
-
-                sql.close();
-
-                if (records)
-                    return resolve(records.recordset)
-            })
-        });
-    })
+    return exec(sSQL, false);
 }
 
-module.exports.Execute = (sSQL) => {
+module.exports.CallFunc = (config) => {
+    const func = config.function;
+    const optional = config.optional || '';
+    
+    let sSQL = "Select * From " + func + " " + optional;
+    return exec(sSQL, false);
+}
+
+module.exports.ExecProc = (sSQL) => {
+    return exec(sSQL, true);
+}
+
+function exec(sSQL, isNonQuery) {
     return new Promise((resolve, reject) => {
         sql.connect(config, err => {
-            if (err)
-                reject(err);
+            if (err) {
+                if (isNonQuery)
+                    reject(err);
+                return reject(err);
+            }
 
             var request = new sql.Request();
             request.query(sSQL, (err, result) => {
-                if (err)
-                    reject(err);
+                if (err) {
+                    if (isNonQuery)
+                        reject(err);
+                    return reject(err);
+                }
 
-                sql.close();
+                // if(isNonQuery)
+                //     sql.close();
 
-                if (result)
-                    resolve(result)
+                if (result) {
+                    if (isNonQuery)
+                        resolve(result)
+                    return resolve(result.recordset);
+                }
             })
         });
     })

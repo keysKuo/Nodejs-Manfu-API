@@ -36,16 +36,12 @@ router.get('/storage', async (req, res, next) => {
         })
 })
 
-// [GET] Get Product list page by Target -> /api/products/get-products/:target
-router.get("/get-products/:target", async (req, res, next) => {
-    const { target } = req.params;
-    let optional = target == 'kitchen' ? '' : "where is_available = 1 order by product_ID asc, product_priority desc";
-    await db.Query(queryString("select", {
-        select: "*",
-        table: "__PRODUCT",
-        // đoạn string tiếp theo
-        optional: optional
-    }))
+// [GET] Get Product list page by Target -> /api/products/get-menu/
+router.get("/get-menu/", async (req, res, next) => {
+    await db.CallFunc({
+        function: 'FN_GET_MENU_CLIENT()',
+        optional: 'Order by product_category'
+    })
         .then(data => {
             if (data.length != 0) {
                 return res.status(200).json({
