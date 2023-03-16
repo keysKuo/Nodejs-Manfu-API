@@ -4,6 +4,7 @@ use manfu
 
 -----------------------------------------------------------
 
+
 create table __PRODUCT (
 	product_ID varchar(10),
 	product_name nvarchar(255) not null,
@@ -78,7 +79,6 @@ create table __ORDER (
 )
 
 
-
 -----------------------------------------------------------
 
 --ticket_priority = 10, extra_priority = 9, vegatable_priority = 8
@@ -117,11 +117,9 @@ values ('TAB0000001', 4, 0)
 insert into __TABLE values ('TAB0000002', 8, 1)
 insert into __TABLE values ('TAB0000003', 10, 1)
 
-insert into __BILL values ('B0001', 2000000, GETDATE(), 'TAB0000001', 'EMP0000005')
+insert into __BILL values ('B0001', 2000000, GETDATE(), 0, 'TAB0000001', 'EMP0000005')
 
-insert into __ORDER  (order_ID, created_at, product_ID, price, quantity, order_status, order_priority, table_ID, bill_ID) 
-values ('OD00001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001', 'B0001')
+insert into __ORDER values ('OD00001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001', 'B0001')
+insert into __ORDER values ('OD00002', GETDATE(), 'AL00000001', 150000, 3, 'waiting', 6, 'TAB0000001', 'B0001')
 
-insert into __ORDER  (order_ID, created_at, product_ID, price, quantity, order_status, order_priority, table_ID, bill_ID) 
-values ('OD00002', GETDATE(), 'AL00000001', 150000, 3, 'waiting', 6, 'TAB0000001', 'B0001')
 
