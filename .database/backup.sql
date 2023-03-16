@@ -21,7 +21,7 @@ create table __STAFF(
 	staff_name nvarchar(255),
 	
 	join_date datetime,
-	role varchar(255) check (role in ('ch	ef', 'waiter', 'manager')),
+	role varchar(255) check (role in ('chef', 'waiter', 'manager')),
 	image_link varchar(255) null,
 	
 	is_available BIT,
@@ -51,6 +51,7 @@ create table __BILL(
 	bill_ID varchar(10),
 	total_price int,
 	created_at datetime,
+	is_completed bit,
 	table_ID varchar(10),
     staff_ID varchar(10),
 	constraint PK_BILL primary key (bill_ID),
@@ -124,10 +125,3 @@ values ('OD00001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001'
 insert into __ORDER  (order_ID, created_at, product_ID, price, quantity, order_status, order_priority, table_ID, bill_ID) 
 values ('OD00002', GETDATE(), 'AL00000001', 150000, 3, 'waiting', 6, 'TAB0000001', 'B0001')
 
---drop function FN_REFRESH_ORDER_QUEUE 
-Create function FN_GET_MENU_CLIENT ()
-Returns table 
-As
-Return 
-    Select * From __PRODUCT
-    Where is_available = 1
