@@ -1,3 +1,23 @@
+-- VIEW ALL FUNCTIONS
+-- CURRENTLY 10
+-- UPDATED 16/3/2023
+SELECT name, definition, type_desc 
+FROM sys.sql_modules m 
+INNER JOIN sys.objects o 
+        ON m.object_id=o.object_id
+WHERE type_desc like '%function%'
+
+
+-- VIEW ALL TABLES
+-- drop function FN_GET_ALL_TABLE
+CREATE FUNCTION FN_GET_ALL_TABLE ()
+RETURNS TABLE
+AS
+RETURN (
+    SELECT *
+    FROM __TABLE
+)
+GO
 
 -- View Menu Client
 Create function FN_GET_MENU_CLIENT ()
