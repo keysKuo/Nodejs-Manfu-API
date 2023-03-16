@@ -24,7 +24,9 @@ module.exports.CallFunc = (config) => {
     return exec(sSQL, false);
 }
 
-module.exports.ExecProc = (sSQL) => {
+module.exports.ExecProc = (config) => {
+    const proc = config.procedure;
+    let sSQL = "Exec " + proc;
     return exec(sSQL, true);
 }
 

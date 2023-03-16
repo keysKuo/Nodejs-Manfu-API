@@ -71,11 +71,9 @@ router.get("/get-menu/", async (req, res, next) => {
 // [GET] Preview Product /api/products/get-one/:pid
 router.get('/get-one/:pid', async (req, res, next) => {
     const { pid } = req.params;
-    await db.Query(queryString('select', {
-        select: '*',
-        table: '__PRODUCT',
-        where: `product_id = '${pid}'`
-    }))
+    await db.CallFunc({
+        function: `FN_FIND_A_PRORDUCT_BY_ID ('${pid}')`
+    })
         .then(records => {
             if (records.length != 0) {
                 let is_available = records[0].is_available;
@@ -161,11 +159,9 @@ router.put('/update/:pid', async (req, res, next) => {
     const { pname, category, price, priority, is_available, pimg } = req.body;
     let available = is_available ? 1 : 0;
 
-    await db.Execute(queryString('update', {
-        table: '__PRODUCT',
-        set: `product_name = N'${pname}', product_category = '${category}', product_price = ${price}, product_priority = ${priority}, is_available = ${available}, image_link = '${pimg}'`,
-        where: `product_ID = '${pid}'`
-    }))
+    await db.ExecProc({
+        procedure: `PROC_UPDATE_PRODUCT '${pid}', N'${pname}', '${category}', ${price}, ${priority}, ${available}, '${pimg}'`
+    })
         .then(() => {
             return res.status(200).json({ success: true, msg: 'Chỉnh sửa sản phẩm thành công' });
         })
@@ -182,11 +178,9 @@ router.put('/switch-status/:pid', async (req, res, next) => {
     
     let available = (is_available == "true") ? 0 : 1;
     
-    await db.Execute(queryString('update', {
-        table: '__PRODUCT',
-        set: `is_available = ${available}`,
-        where: `product_ID = '${pid}'`
-    }))
+    await db.ExecProc({
+        procedure: `PROC_SWITCH_STATUS_PRODUCT '${pid}', ${available}`
+    })
         .then(() => {
             return res.status(200).json({
                 success: true,

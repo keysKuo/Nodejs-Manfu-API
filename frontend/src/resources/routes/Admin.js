@@ -111,21 +111,24 @@ router.get('/delete-product/:pid', async (req, res, next) => {
 router.get('/update-product/:pid', async (req, res, next) => {
     const { pid } = req.params;
     let categories = ['buffet', 'alacarte', 'extra'];
-    let data = await fetch(API_URL + `/products/getOne/${pid}`, {
+    let data = await fetch(API_URL + `/products/get-one/${pid}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
     .then(async result => {
-        let data = await result.json();
-        return {
-            pid: data.product_ID,
-            pname: data.product_name,
-            pimg: data.image_link,
-            category: data.product_category,
-            price: data.product_price,
-            priority: data.product_priority,
-            is_available: data.is_available == 1
-        };
+        result = await result.json();
+        if (result.success) {
+            let data = result.data;
+            return {
+                pid: data.product_ID,
+                pname: data.product_name,
+                pimg: data.image_link,
+                category: data.product_category,
+                price: data.product_price,
+                priority: data.product_priority,
+                is_available: data.is_available == 1
+            };
+        }    
     })
 
     return res.render('pages/products/update', {
