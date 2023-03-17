@@ -1,35 +1,75 @@
+use manfu
 
--- View Menu Client
+
+-- VIEW ALL FUNCTIONS
+-- CURRENTLY 10
+-- UPDATED 17/3/2023
+SELECT name, definition, type_desc 
+FROM sys.sql_modules m 
+INNER JOIN sys.objects o 
+        ON m.object_id=o.object_id
+WHERE type_desc like '%function%'
+
+
+-- VIEW ALL TABLES
+CREATE FUNCTION FN_GET_ALL_TABLE ()
+RETURNS TABLE
+AS
+RETURN (
+    SELECT *
+    FROM __TABLE
+)
+GO
+
+
+-- VIEW MENU (CLIENT SIDE/AVAILABLE)
 Create function FN_GET_MENU_CLIENT ()
 Returns table 
 As
 Return 
     Select * From __PRODUCT
     Where is_available = 1
-    
-
---  Refresh Order Queue (View Orders)
-Create function FN_REFRESH_ORDER_QUEUE ()
-Returns table
-As
-Return
-    Select * From __ORDER
+GO
 
 
--- View Product Storage
+-- VIEW PRODUCT STORAGE
 Create Function FN_VIEW_PRODUCT_STORAGE ()
 Returns Table
 As 
 Return
     Select * From __PRODUCT
+GO
 
--- Find a Product by ID
+
+-- VIEW PRODUCT INFO BY ID
 Create Function FN_FIND_A_PRORDUCT_BY_ID (@pid varchar(10))
 Returns Table 
 As 
 Return 
     Select * From __PRODUCT
     Where product_ID = @pid
+GO
+
+
+--  REFRESH ORDER QUEUE (VIEW ORDER)
+Create function FN_REFRESH_ORDER_QUEUE ()
+Returns table
+As
+Return
+    Select * From __ORDER
+GO
+
+
+-- VIEW BILL
+CREATE FUNCTION FN_VIEW_BILL ()
+RETURNS TABLE
+AS
+RETURN (
+	SELECT * 
+	FROM __BILL
+)
+GO
+
     
 -- View Orders History
 Create Function FN_VIEW_ORDERS_HISTORY (@date Date)
