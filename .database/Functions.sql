@@ -2,8 +2,10 @@ use manfu
 
 
 -- VIEW ALL FUNCTIONS
--- CURRENTLY 10
+-- CURRENTLY 12
 -- UPDATED 17/3/2023
+
+
 SELECT name, definition, type_desc 
 FROM sys.sql_modules m 
 INNER JOIN sys.objects o 
@@ -70,6 +72,32 @@ RETURN (
 )
 GO
 
+
+-- VIEW BILL INFO
+Create Function FN_VIEW_BILL_INFO (@bill_ID varchar(10))
+Returns Table 
+As
+Return 
+    Select B.bill_ID, P.product_name, O.price, O.quantity, P.product_category, B.created_at, B.total_price, B.is_completed
+    From __Product P, __Order O, __Bill B
+    Where B.bill_ID = O.bill_ID 
+    And O.product_ID = P.product_ID 
+    And O.order_status = 'success' 
+    And B.bill_ID = @bill_ID
+GO
+
+
+-- CALCULATE BILL
+CREATE FUNCTION FN_CALCULATE_BILL (@bill_ID varchar(10))
+RETURNS TABLE
+AS
+RETURN (
+	SELECT SUM(price * quantity) as total 
+	FROM FN_VIEW_BILL_INFO(@bill_ID)
+	WHERE bill_ID = @bill_ID
+)
+GO
+
     
 -- View Orders History
 Create Function FN_VIEW_ORDERS_HISTORY (@date Date)
@@ -103,14 +131,3 @@ Return
     Select * From __ACCOUNT
     Where account_ID = @account_ID
 
--- View Bill info
-Create Function FN_VIEW_BILL_INFO (@bill_ID varchar(10))
-Returns Table 
-As
-Return 
-    Select B.bill_ID, P.product_name, O.price, O.quantity, B.created_at, B.total_price
-    From __Product P, __Order O, __Bill B
-    Where B.bill_ID = O.bill_ID 
-    And O.product_ID = P.product_ID 
-    And O.order_status = 'success' 
-    And B.bill_ID = @bill_ID

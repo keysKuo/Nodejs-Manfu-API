@@ -1,6 +1,11 @@
 use manfu
 
 
+-- VIEW ALL PROCEDURES
+-- CURRENTLY 22
+-- UPDATED 17/3/2023
+
+
 --VIEW ALL PROCEDURES
 SELECT * 
 FROM manfu.INFORMATION_SCHEMA.ROUTINES
@@ -119,10 +124,11 @@ AS
 	WHERE bill_ID = @bill_ID
 GO
 
-CREATE PROC PROC_SWITCH_STATUS_BILL @bill_ID varchar(10), @is_completed bit
+CREATE PROC PROC_SWITCH_STATUS_BILL @bill_ID varchar(10), @is_completed bit, @total_price int
 AS
 	UPDATE __BILL
-	SET is_completed = @is_completed
+	SET is_completed = @is_completed,
+		total_price = @total_price
 	WHERE bill_ID = @bill_ID
 GO
 
@@ -154,7 +160,6 @@ AS
 	UPDATE __ORDER
 	SET order_status = @order_status
 	WHERE order_ID = @order_ID
-		
 GO
 
 
