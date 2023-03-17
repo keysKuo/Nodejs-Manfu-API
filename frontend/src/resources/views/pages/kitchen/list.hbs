@@ -8,90 +8,33 @@
       </label>
       
         <ul id="formList" class="form__list">
-            <li class="form__item">
-                <div class="img-box inline__block">
-                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
-                         <p style="visibility: hidden;">...</p>
-                    </div>
-                    <div class="info-box inline__block">
-                        {{!-- <p style="visibility: hidden;">...</p> --}}
-                        <p><b>Món: </b>Sườn xào chua ngọt</p>
-                        <p><b>Bàn số: </b>1</p>
-                        <p><b>Order lúc: </b>5:30 PM</p>
-                        <p style="visibility: hidden;">...</p>
-   
-                    </div>
-                    <div class="check-box inline__block">
-                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
-                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
-                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
-                        <p style="visibility: hidden;">...</p>
-                    </div>
-               
-            </li>
-            <li class="form__item">
-                <div class="img-box inline__block">
-                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
-                         <p style="visibility: hidden;">...</p>
-                    </div>
-                    <div class="info-box inline__block">
-                        {{!-- <p style="visibility: hidden;">...</p> --}}
-                        <p><b>Món: </b>Sườn xào chua ngọt</p>
-                        <p><b>Bàn số: </b>3</p>
-                        <p><b>Order lúc: </b>5:30 PM</p>
-                        <p style="visibility: hidden;">...</p>
-   
-                    </div>
-                    <div class="check-box inline__block">
-                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
-                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
-                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
-                        <p style="visibility: hidden;">...</p>
-                    </div>
-               
-            </li>
-            <li class="form__item">
-                <div class="img-box inline__block">
-                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
-                         <p style="visibility: hidden;">...</p>
-                    </div>
-                    <div class="info-box inline__block">
-                        {{!-- <p style="visibility: hidden;">...</p> --}}
-                        <p><b>Món: </b>Sườn xào cay ngọt</p>
-                        <p><b>Bàn số: </b>3</p>
-                        <p><b>Order lúc: </b>5:30 PM</p>
-                        <p style="visibility: hidden;">...</p>
-   
-                    </div>
-                    <div class="check-box inline__block">
-                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
-                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
-                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
-                        <p style="visibility: hidden;">...</p>
-                    </div>
-               
-            </li>
-            <li class="form__item">
-                <div class="img-box inline__block">
-                        <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
-                         <p style="visibility: hidden;">...</p>
-                    </div>
-                    <div class="info-box inline__block">
-                        {{!-- <p style="visibility: hidden;">...</p> --}}
-                        <p><b>Món: </b>Cơm xào chua ngọt</p>
-                        <p><b>Bàn số: </b>3</p>
-                        <p><b>Order lúc: </b>5:30 PM</p>
-                        <p style="visibility: hidden;">...</p>
-   
-                    </div>
-                    <div class="check-box inline__block">
-                        {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
-                        <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div>
-                        <div style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</div>
-                        <p style="visibility: hidden;">...</p>
-                    </div>
-               
-            </li>
+            {{#each orders}}
+                <li class="form__item">
+                    <div class="img-box inline__block">
+                            <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                            <p style="visibility: hidden;">...</p>
+                        </div>
+                        <div class="info-box inline__block">
+                            {{!-- <p style="visibility: hidden;">...</p> --}}
+                            <p><b>Món: </b>{{pname}}</p>
+                            <p><b>Bàn: </b>{{table}}</p>
+                            <p><b>Order lúc: </b>{{created_at}}</p>
+                            <p style="visibility: hidden;">...</p>
+    
+                        </div>
+                        <div class="check-box inline__block">
+                            {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                            {{!-- <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div> --}}
+                            {{#if nextStatus}}
+                                {{{nextStatus}}}
+                                <a style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</a>
+                            {{/if}}
+                            <p style="visibility: hidden;">...</p>
+                        </div>
+                
+                </li>
+            {{/each}}
+            
             
             
             
@@ -108,7 +51,7 @@ function filterData() {
   
   for (li of formList.children) {
     const target1 = li.children[1].children[0].textContent.split('Món: ')[1].toLowerCase();
-    const target2 = li.children[1].children[1].textContent.split('Bàn số: ')[1].toLowerCase();
+    const target2 = li.children[1].children[1].textContent.split('Bàn: ')[1].toLowerCase();
     
     (removeAscent(target1).includes(removeAscent(val)) || target2.includes(val))
       ? li.classList.remove("form__item_hidden")

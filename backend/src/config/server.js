@@ -22,6 +22,10 @@ const init = () => {
             helpers: {
                 formatCurrency: (number) => {
                     return number.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+                },
+
+                equal: (left, right, options) => {
+                    return (left === right) ? options.fn(this) : options.inverse(this); 
                 }
             }
         })
