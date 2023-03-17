@@ -5,12 +5,10 @@ const { queryString } = require('../middlewares');
 const { statusCheck, procedureQueryString } = require('../middlewares/index2');
 const { uuid } = require('uuidv4');
 const { default: fetch } = require('node-fetch');
-const { json } = require("body-parser");
-const { response } = require("express");
 const API_URL = process.env.API_URL;
 
 
-// [GET] Get list of bill page -> /api/bills/get-bills
+// [GET] Get all bills  -> /api/bills/get-bills
 router.get('/get-bills', async (req, res, next) => {
     await db.Query(queryString("select", {
         select: "*",

@@ -2,8 +2,8 @@ use manfu
 
 
 -- VIEW ALL PROCEDURES
--- CURRENTLY PROCS: 20
--- UPDATED: 16/3/23
+-- CURRENTLY 22
+-- UPDATED 17/3/2023
 SELECT * 
 FROM manfu.INFORMATION_SCHEMA.ROUTINES
 WHERE ROUTINE_TYPE = 'PROCEDURE'
@@ -78,6 +78,11 @@ AS
 	SET is_available = @is_available
 	WHERE product_ID = @product_ID
 GO
+CREATE PROC PROC_DELETE_PRODUCT @product_ID varchar(10)
+AS
+	DELETE FROM __PRODUCT
+	WHERE product_ID = @product_ID
+GO
 
 
 --TABLE
@@ -149,14 +154,11 @@ AS
 		bill_ID = @bill_ID
 	WHERE order_ID = @order_ID
 GO
-CREATE PROC PROC_SWITCH_STATUS_ORDER @order_ID varchar(10), @product_ID varchar(10), @order_status varchar(10), @table_ID varchar(10), @bill_ID varchar(10)
+CREATE PROC PROC_SWITCH_STATUS_ORDER @order_ID varchar(10), @order_status varchar(10)
 AS
 	UPDATE __ORDER
 	SET order_status = @order_status
 	WHERE order_ID = @order_ID
-		AND product_ID = @product_ID
-		AND table_ID = @table_ID
-		AND bill_ID = @bill_ID
 GO
 
 
