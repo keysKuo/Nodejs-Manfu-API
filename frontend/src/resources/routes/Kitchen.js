@@ -24,10 +24,10 @@ router.get('/queue', async (req, res, next) => {
                     let nextStatus = '';
                     switch (d.order_status) {
                         case 'waiting':
-                            nextStatus = `<a style="font-size: 10px" class="btn btn-primary w-100 mt-2 mb-3">Nhận đơn</a>`
+                            nextStatus = `<a href="/kitchen/switch-status-order/${d.order_ID}/preparing" style="font-size: 10px" class="btn btn-primary w-100 mt-2 mb-3">Nhận đơn</a>`
                             break;
                         case 'preparing':
-                            nextStatus = `<a style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</a>`
+                            nextStatus = `<a href="/kitchen/switch-status-order/${d.order_ID}/success" style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</a>`
                             break;
                         default:
                             break;
@@ -49,12 +49,40 @@ router.get('/queue', async (req, res, next) => {
                 error: req.flash('error') || '' ,
             })
         }
+
+        return res.json(result)
     })
     .catch(err => {
         return res.status(500).json({err});
     })
 
     
+})
+
+// [GET] Switch status order /kitchen/switch-status-order/:oid/:status
+router.get('/switch-status-order/:oid/:status', async (req, res, next) => {
+    const { oid, status } = req.params;
+    
+    let body = JSON.stringify({status})
+    await fetch(API_URL + `/orders/update-status/${oid}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json'},
+        body: body
+    })
+    .then(async result => {
+        result = await result.json();
+        if (result.success) {
+            console.log('success');
+            return res.redirect('/kitchen/queue');
+        }
+        else {
+            console.log(result);
+            return res.redirect('/kitchen/queue');
+        }
+    })
+    .catch(err => {
+        return res.json(err);
+    })
 })
 
 module.exports = router;

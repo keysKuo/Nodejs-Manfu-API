@@ -175,6 +175,7 @@ router.put('/update-status/:oid', async (req, res, next) => {
     const { oid } = req.params
     const { status } = req.body
     let result = await updateStatusOrderCheck(status, oid)
+    
     if (result.success == true) {
         await db.ExecProc({
             procedure: `PROC_SWITCH_STATUS_ORDER '${oid}', '${status}'`
