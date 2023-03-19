@@ -175,7 +175,7 @@ router.put('/update-status/:oid', async (req, res, next) => {
     const { oid } = req.params
     const { status } = req.body
     let result = await updateStatusOrderCheck(status, oid)
-    
+
     if (result.success == true) {
         await db.ExecProc({
             procedure: `PROC_SWITCH_STATUS_ORDER '${oid}', '${status}'`
@@ -204,36 +204,12 @@ router.put('/update-status/:oid', async (req, res, next) => {
 
 
 // [POST] Create order -> /api/orders/create-order/
-// {
-//     "table_ID": "TAB0000001",
-//     "data": [
-//       {
-//         "product_ID": "AL00000001",
-//         "product_name": "bò xào ngũ vị",
-//         "product_category": "alacarte",
-//         "product_price": 75000,
-//         "product_priority": 4,
-//         "is_available": true,
-//         "image_link": null,
-//         "quantity": 2
-//       },
-//       {
-//         "product_ID": "TK00000001",
-//         "product_name": "ticket buffet lẩu",
-//         "product_category": "ticket",
-//         "product_price": 500000,
-//         "product_priority": 10,
-//         "is_available": true,
-//         "image_link": null,
-//         "quantity": 2
-//       }
-//     ]
-//   }
 router.post('/create-order', async (req, res, next) => {
-    const { bill_ID, data } = req.body // data = product_ID, quantity
+    const { table_ID, bill_ID, data } = req.body // data = product_ID, quantity
     // bill_ID -> check bill exist and bill status -> get billID and tableID
     let bill = await checkExistObject('FN_VIEW_BILL()', `WHERE bill_ID = '${bill_ID}'`)
-    if (bill.success == true && bill.data.is_completed == false) {
+    let table = await checkExistObject('FN_GET_ALL_TABLE()', `WHERE table_ID = '${table_ID}'`)
+    if (bill.success == true && bill.data.is_completed == false && table.data.is_available == false && bill.data.table_ID == table.data.table_ID) {
         data.forEach(async element => {
             // product_ID -> check product exists -> order priority and price
             let product = await checkExistObject('FN_VIEW_PRODUCT_STORAGE()', `WHERE product_ID = '${element.product_ID}'`)

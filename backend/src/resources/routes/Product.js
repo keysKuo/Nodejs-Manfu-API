@@ -2,7 +2,7 @@ const router = require('express').Router();
 const db = require("../../config/db/database");
 const { queryString } = require('../middlewares');
 const { uuid } = require('uuidv4');
-const { checkExist } = require("../middlewares/function-phu");
+const { checkExist, checkExistObject } = require("../middlewares/function-phu");
 
 
 // [GET] Get product storage -> /api/products/storage
@@ -218,6 +218,11 @@ router.put('/switch-status/:pid', async (req, res, next) => {
     const { pid } = req.params;
     const { is_available } = req.body;
     let available = (is_available == "true") ? 0 : 1;
+
+    let productChecker = await checkExistObject('FN_VIEW_PRODUCT_STORAGE()', `WHERE product_ID = '${pid}'`)
+    if (productChecker.success == false) {
+        return res.status(404).json({ success: true, code: 0, message: `Product ${pid} doesn't exist! Cannot switch status!` })
+    }
     await db.ExecProc({
         procedure: `PROC_SWITCH_STATUS_PRODUCT '${pid}', ${available}`
     })

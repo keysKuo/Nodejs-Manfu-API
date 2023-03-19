@@ -262,7 +262,10 @@ router.put('/open-table/:tid', async (req, res, next) => {
                         return res.status(200).json({
                             success: true,
                             code: 1,
-                            message: `${bill_ID} is created!`
+                            bill_ID_created: bill_ID,
+                            table_ID_used: tid,
+                            staff_ID: staff_ID,
+                            message: `${tid} is being used and ${bill_ID} is created!`
                         })
                     })
                     .catch((err) => {
@@ -284,7 +287,7 @@ router.put('/open-table/:tid', async (req, res, next) => {
         return res.status(500).json({
             success: true,
             code: 0,
-            message: `Table ${tid} is currently closed! You can not create a bill!`
+            message: `Table ${tid} is currently being used with ${bill_ID}! You can not create a bill!`
         })
     }
     else if (checkStaff == 0) {

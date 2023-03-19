@@ -8,18 +8,18 @@ const router = require('./resources/routes')
 router(app);
 
 app.get('/', async (req, res, next) => {
-    
+
     return res.render('pages/admin', {
         layout: 'admin'
     })
-    
+
 })
 
 app.get('/get-bill', async (req, res, next) => {
     const { bill_id } = req.query;
-    await fetch(API_URL + `admin/get-bill/${bill_id}` , {
+    await fetch(API_URL + `admin/get-bill/${bill_id}`, {
         method: 'GET',
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
     }).then(async result => {
         let data = await result.json();
         return res.json(data)
