@@ -1,176 +1,107 @@
 require("dotenv").config();
+const { queryString } = require('../middlewares');
+const { uuid } = require('uuidv4');
 const router = require('express').Router();
 const db = require("../../config/db/database");
-const { queryString } = require('../middlewares');
-const { statusCheck, procedureQueryString } = require('../middlewares/index2');
-const { uuid } = require('uuidv4');
-const { default: fetch } = require('node-fetch');
+const { checkExistObject } = require("../middlewares/function-phu");
 const API_URL = process.env.API_URL;
+const moment = require('moment');
 
 
 // [GET] Get all bills  -> /api/bills/get-bills
 router.get('/get-bills', async (req, res, next) => {
-    await db.Query(queryString("select", {
-        select: "*",
-        table: "__BILL"
-    }))
+    await db.CallFunc({
+        function: `FN_VIEW_BILL()`,
+        optional: `ORDER BY created_at desc, total_price asc`
+    })
         .then((data) => {
+            if (data.length == 0)
+                return res.status(300).json({ success: false, code: 0, message: `There are no bill(s)` })
+            else
+                return res.status(200).json({ success: true, code: 1, item_counter: data.length, data: data })
+        })
+        .catch((err) => { return res.status(500).json({ success: false, message: err }) })
+})
+
+
+// [GET] Get bill info by ID  -> /api/bills/get-bill/:bid
+router.get('/get-bill/:bid', async (req, res, next) => {
+    const { bid } = req.params
+    await db.CallFunc({
+        function: `FN_VIEW_BILL_INFO('${bid}')`
+    })
+        .then(async (data) => {
             if (data.length == 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "No bill in database"
-                })
+                return res.status(300).json({ success: false, message: `Bill: ${bid} do not exist!` })
             }
             else {
+                let total_price = await checkExistObject(`FN_CALCULATE_BILL('${bid}')`, '')
                 return res.status(200).json({
                     success: true,
-                    message: `There are ${data.length}`,
+                    code: 1,
+                    item_counter: data.length,
+                    total_price: total_price.data.total.toLocaleString(),
+                    tax_value: "10%",
+                    final_price: (total_price.data.total + (total_price.data.total * 10 / 100)).toLocaleString(),
+                    is_completed: data[0].is_completed,
                     data: data
                 })
             }
         })
-        .catch(err => {
-            return res.status(500).json({
-                success: false,
-                message: err
-            })
-        })
+        .catch((err) => { return res.status(500).json({ success: false, message: err }) })
 })
 
 
-// [POST] Create bill page -> /api/bills/create-bill
-// {
-//     "table_ID": "TAB0000001",
-//     "staff_ID": "EMP0000003"
-//   }
-router.post("/create-bill", async (req, res, next) => {
-    const { table_ID, staff_ID } = req.body
-    let bill_ID = "B" + uuid().substring(0, 9) // create bill_ID
-
-    // update/add bill_ID for __ORDER
-    await db.Execute(queryString("update", {
-        table: "__ORDER",
-        set: `bill_ID = '${bill_ID}'`,
-        where: `table_ID = '${table_ID}' and bill_ID is null`
-    }))
-        .then(() => {
-            console.log("Add bill_ID successfully")
+// [PUT] Close bill  -> /api/bills/close-bill/:bid
+// close bill = đóng bill = table is available (but do not allow it to open)
+router.put('/close-bill/:bid', async (req, res, next) => {
+    const { bid } = req.params
+    let bill = await checkExistObject('FN_VIEW_BILL()', `WHERE bill_ID = '${bid}'`)
+    let total_price = await checkExistObject(`FN_CALCULATE_BILL('${bid}')`, '')
+    // console.log(bill)
+    if (bill.data.is_completed == false) {
+        await db.ExecProc({
+            procedure: `PROC_SWITCH_STATUS_BILL '${bid}', 1, ${(total_price.data.total + (total_price.data.total * 10 / 100))}`
         })
-        .catch(err => {
-            return res.status(500).json({
-                success: false,
-                message: err
+            .then(async () => {
+                await db.ExecProc({
+                    procedure: `PROC_SWITCH_STATUS_TABLE '${bill.data.table_ID}', 1`
+                })
+                    .then(() => {
+                        return res.status(200).json({
+                            success: true, code: 1,
+                            message_1: `Bill: ${bid} switched status to completed!`,
+                            message_2: `Table: ${bill.data.table_ID} switched status to available!`,
+                            total_price: total_price.data.total.toLocaleString(),
+                            tax_value: "10%",
+                            final_price: (total_price.data.total + (total_price.data.total * 10 / 100)).toLocaleString(),
+                        })
+                    })
+                    .catch((err) => { return res.status(500).json({ success: false, code: "PROC_SWITCH_STATUS_TABLE", message: err }) })
             })
-        })
+            .catch((err) => { return res.status(500).json({ success: false, code: "PROC_SWITCH_STATUS_BILL", message: err }) })
+    }
+    else {
+        return res.status(500).json({ success: false, message: `Bill: ${bid} is completed (closed) and cannot be changed!` })
+    }
+})
 
-    // convert remaining orders in __ORDER_DETAIL that are "idle" to "cancel" on/after update bill_ID
-    await db.Execute(`update table_a
-                            set table_a.product_status = 'cancel'
-                            from
-                                __ORDER_DETAIL as table_a
-                            inner join (select *
-                                        from __ORDER O
-                                        where O.table_ID = '${table_ID}' and O.bill_ID = '${bill_ID}') as table_b
-                            on table_a.order_ID = table_b.order_ID
-                            where table_a.product_status = 'idle'`)
-        .then(() => {
-            console.log("Update status for remaining order successfully")
-        })
-        .catch(err => {
-            console.log(err)
-        })
 
-    // get list of order after updated
-    let result
-    await db.Query(`select OD.*, P.product_category
-                        from __ORDER O, __ORDER_DETAIL OD, __PRODUCT P
-                        where O.order_ID = OD.order_ID
-                            and OD.product_ID = P.product_ID
-                            and O.table_ID = '${table_ID}' and O.bill_ID = '${bill_ID}'`)
-        .then((data) => {
-            if (data.length != 0) {
-                console.log(`Get list after add bill_ID and update product status of ${bill_ID} and ${table_ID}`)
-                result = data
-            }
-            else {
-                console.log("Step 3 data was empty")
-            }
-        })
-        .catch(err => {
-            console.log(err)
-        })
-
-    // calculate money (ticket + alcarte + extra, no for the buffet ones)
-    let ticket = 0
-    let alacarte = 0
-    let extra = 0
-    result.forEach(element => {
-        if (element.product_status == 'success') {
-            if (element.product_category == 'alacarte') {
-                alacarte = alacarte + (element.quantity * element.price)
-            }
-            if (element.product_category == 'ticket') {
-                ticket = ticket + (element.quantity * element.price)
-            }
-            if (element.product_category == 'extra') {
-                extra = extra + (element.quantity * element.price)
-            }
-        }
-    });
-    let total_price = ticket + alacarte + extra
-    await db.Execute(queryString("insert", {
-        table: "__BILL",
-        values: `'${bill_ID}', ${total_price}, getdate(), '${table_ID}'`
-    }))
-        .then(() => {
-            console.log(`Add bill ${bill_ID} at ${new Date().toISOString()}`)
-        })
-        .catch(err => {
-            return res.status(500).json({
-                success: false,
-                message: err
-            })
-        })
-
-    // need to add switch status table, using fetch
-    await fetch(API_URL + `tables/switch-available-status/${table_ID}`, {
-        method: "PUT",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            staff_ID: staff_ID,
-            is_available: true,
-        })
+router.put("/update/:bid", async (req, res, next) => {
+    const { bid } = req.params
+    const { total_price, created_at, is_completed, table_ID, staff_ID } = req.body
+    let date = moment(created_at).format('YYYY-MM-DD HH:mm:ss')
+    await db.ExecProc({
+        procedure: `PROC_UPDATE_BILL '${bid}', ${total_price}, '${date}', ${is_completed}, '${table_ID}', '${staff_ID}'`
     })
-        .then(async (response) => {
-            let data = await response.json()
-            console.log(data.success)
-            console.log(data.message)
-            console.log(data.is_available)
-        })
-        // .then((data) => {
-        //     console.log(data.success)
-        //     console.log(data.message)
-        //     console.log(data.is_available)
-        // })
-        .catch(err => {
-            return res.status(500).json({
-                success: false,
-                message: err
+        .then(() => {
+            return res.status(200).json({
+                success: true,
+                code: 1,
+                message: `${bid} was updated at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
             })
         })
-
-    return res.status(200).json({
-        message: `${bill_ID} was added at ${new Date().toISOString()}`,
-        price_detail: {
-            ticket: ticket.toLocaleString(),
-            alacarte: alacarte.toLocaleString(),
-            extra: extra.toLocaleString(),
-            total_price: total_price.toLocaleString()
-        },
-        products: result
-    })
+        .catch((err) => { return res.status(500).json({ success: false, message: err }) })
 })
 
 
