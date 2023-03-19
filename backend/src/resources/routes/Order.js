@@ -148,6 +148,10 @@ router.put("/update/:oid", async (req, res, next) => {
     const { created_at, product_ID, price, quantity, order_status, order_priority, table_ID, bill_ID } = req.body
     let date = moment(created_at).format('YYYY-MM-DD HH:mm:ss')
     // console.log(date)
+    let order = await checkExistObject('FN_REFRESH_ORDER_QUEUE()', `WHERE order_ID = '${oid}'`)
+    if (order.success == false) {
+        return res.status(404).json({ success: false, code: 0, message: `${oid} does not exist!` })
+    }
     await db.ExecProc({
         procedure: `PROC_UPDATE_ORDER '${oid}', '${date}', '${product_ID}', ${price}, ${quantity}, '${order_status}', ${order_priority}, '${table_ID}', '${bill_ID}'`
     })

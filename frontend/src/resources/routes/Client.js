@@ -7,7 +7,7 @@ const API_URL = process.env.API_URL;
 const { upload } = require('../middlewares/multer');
 
 router.get('/menu', async (req, res, next) => {
-    await fetch(API_URL + "products/get-menu", {
+    await fetch(API_URL + "/products/get-menu", {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
