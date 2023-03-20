@@ -117,20 +117,14 @@ insert into __TABLE (table_ID, table_seat, is_available)
 values ('TAB0000001', 4, 1)
 insert into __TABLE values ('TAB0000002', 8, 1)
 insert into __TABLE values ('TAB0000003', 10, 1)
-select * from __TABLE
-update __TABLE set is_available = 1 where table_ID = 'TAB0000004'
-
 
 insert into __BILL values ('B0001', 2000000, GETDATE(), 0, 'TAB0000001', 'EMP0000005')
 select * from __BILL
-delete from __BILL where bill_ID = 'Bf0df2548-'
 
 insert into __ORDER values ('OD00000001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001', 'B0001')
 insert into __ORDER values ('OD00000002', GETDATE(), 'AL00000001', 150000, 3, 'waiting', 6, 'TAB0000001', 'B0001')
-insert into __ORDER values ('OD00000000', GETDATE(), 'AL00000001', 150000, 3, 'cancel', 6, 'TAB0000001', 'B0001')
 select * from __ORDER ORDER BY order_priority desc, created_at asc
---delete from __ORDER 
-update __ORDER set order_status = 'waiting' where order_ID = 'OD00000001'
+delete from __ORDER 
 
 
 delete from __PRODUCT where product_ID = 'EX00000002'
