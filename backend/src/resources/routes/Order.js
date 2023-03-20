@@ -208,11 +208,14 @@ router.post('/create-order', async (req, res, next) => {
     const { table_ID, bill_ID, data } = req.body // data = product_ID, quantity
     // bill_ID -> check bill exist and bill status -> get billID and tableID
     let bill = await checkExistObject('FN_VIEW_BILL()', `WHERE bill_ID = '${bill_ID}'`)
+    
     let table = await checkExistObject('FN_GET_ALL_TABLE()', `WHERE table_ID = '${table_ID}'`)
+    let isSuccess = true;
     if (bill.success == true && bill.data.is_completed == false && table.data.is_available == false && bill.data.table_ID == table.data.table_ID) {
         data.forEach(async element => {
             // product_ID -> check product exists -> order priority and price
             let product = await checkExistObject('FN_VIEW_PRODUCT_STORAGE()', `WHERE product_ID = '${element.product_ID}'`)
+            
             if (product.success == true) {
                 let product_ID = product.data.product_ID
                 let price = product.data.product_price
@@ -225,19 +228,29 @@ router.post('/create-order', async (req, res, next) => {
                     increaseOrderPriority('PROC_INCREASE_ORDER_PRIORITY')
                 }
                 let order_id = "OR" + uuid().substring(0, 8)
+                
                 await db.ExecProc({
                     procedure: `PROC_INSERT_ORDER '${order_id}', '${product_ID}', ${price}, ${quantity}, '${order_status}', ${order_priority}, '${table_ID}', '${bill_ID}'`
                 })
-                    .then(() => { })
-                    .catch((err) => {
-                        return res.status(500).json({ success: false, message: err })
+                .then(() => {
+                    
+                })
+                .catch((err) => {
+                        console.log(err)
+                        isSuccess = false;
+                        return;
                     })
             }
             // if product does not exist then we do not save it in
         });
-        return res.status(200).json({
-            success: true, code: 1, message: `Order for Bill: ${bill_ID} was created at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
-        })
+
+        if (isSuccess) {
+            return res.status(200).json({
+                success: true, code: 1, message: `Order for Bill: ${bill_ID} was created at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
+            })
+        }else {
+            return res.status(500).json({ success: false, message: err })
+        }    
     }
     else {
         return res.status(300).json({ success: false, message: `The Bill: ${bill_ID} is closed and cannot create orders!` })

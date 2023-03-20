@@ -134,6 +134,7 @@ GO
 
 
 --ORDER
+--drop proc PROC_INSERT_ORDER
 CREATE PROC PROC_INSERT_ORDER @order_ID varchar(10), @created_at datetime, @product_ID varchar(10), @price int, @quantity int, @order_status varchar(10), @order_priority int, @table_ID varchar(10), @bill_ID varchar(10)
 AS
 	INSERT INTO __ORDER

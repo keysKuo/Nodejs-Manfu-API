@@ -58,6 +58,33 @@ $('.btnRemoveCart').click(function(e) {
     
 })
 
+$('.btnPlaceOrder').click(function(e) {
+    e.preventDefault();
+    var input1 = $(".product_ID");
+    var input2 = $('.qty');
+    let data = [];
+    for(var i = 0; i < input1.length; i++){
+        
+        data.push({
+            product_ID: $(input1[i]).val(),
+            quantity: $(input2[i]).text()
+        }) 
+    }
+
+    $.ajax({
+        url: '/client/create-order',
+        method: 'POST',
+        data: { data },
+        success: function(result) {
+            console.log(result)
+        },
+        error: function(err) {
+            
+        }
+    })
+
+})
+
 function isItemExist(pid) {
     if ($(`tr#${pid}`).length > 0)
         return true;
@@ -76,9 +103,11 @@ function addToCart(pid, pname, pimg, price, qty) {
         <td>${pname}</td>
         <td>${price}</td>
         <td class="qty">1</td>
-        <td>0đ</td>
+        <td><input class="product_ID" name="product_ID" type="hidden" value="${pid}">
+        <input class="quantity" name="quantity" type="hidden" value="${qty}">0đ</td>
         
       </tr>`
+      
     )
 }
 

@@ -47,6 +47,7 @@ router.get("/get-menu/", async (req, res, next) => {
         optional: 'ORDER BY product_category'
     })
         .then(data => {
+            
             if (data.length != 0) {
                 return res.status(200).json({
                     success: true,

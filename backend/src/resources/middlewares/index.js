@@ -22,3 +22,5 @@ module.exports.queryString = (type, options) => {
         : query + ' ' + (options.optional || '');
 }
 
+
+
