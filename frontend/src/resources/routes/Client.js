@@ -23,7 +23,7 @@ router.get('/menu', async (req, res, next) => {
                             pid: d.product_ID,
                             pname: d.product_name,
                             pimg: d.image_link,
-                            price: d.product_price.toString().toLocaleString('vi-vn'),
+                            price: d.product_price,
                         }
                     })
                 }
@@ -36,10 +36,12 @@ router.get('/menu', async (req, res, next) => {
                 })
             }
         })
-
-    return res.render('pages/clients/menu', {
-        layout: 'main'
-    })
+        .catch(err => {
+            return res.render('pages/clients/menu', {
+                layout: 'main'
+            })
+        })
+    
 })
 
 router.get('/place-order', async (req, res, next) => {

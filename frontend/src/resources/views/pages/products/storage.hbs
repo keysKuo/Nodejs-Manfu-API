@@ -35,7 +35,8 @@
                                 <th scope='col'>Danh mục</th>
                                 <th scope='col'>Giá</th>
                                 <th scope='col'>Độ ưu tiên</th>
-                                <th scope='col'>Tinh chỉnh</th>
+                                <th scope='col'>Điều chỉnh</th>
+                                <th scope='col'></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,20 +69,26 @@
                                             <!-- Button trigger modal -->
                                             <a
                                                 style="cursor: pointer"
-                                                class='text-danger w-100 switchBtn'
+                                                class='text-danger w-100 delBtn'
                                                 data-available="{{is_available}}"
                                                 data-pid="{{pid}}"
-                                                {{#if is_available}}
-                                                    data-toggle='modal'
-                                                    data-target='#deleteModal'
-                                                    onclick="$('#deleteBtn').attr('href', '/admin/status-product/{{pid}}/{{is_available}}')"
-                                                {{else}}
-                                                    href="/admin/status-product/{{pid}}/{{is_available}}"
-                                                {{/if}}
+                                                data-toggle='modal'
+                                                data-target='#deleteModal'
+                                                onclick="$('#deleteBtn').attr('href', '/admin/delete-product/{{pid}}')"
                                                 
                                             >   
-                                                <i style="color: {{#if is_available}}#38c172{{else}}crimson{{/if}}" class='fas fa-power-off fa-lg'></i>
+                                                <i class='fas fa-trash fa-lg'></i>
+                                                
                                             </a>
+                                        </td>
+                                        <td>
+                                            <label class="switch">
+                                                <input class="switchBtn" {{#if is_available}}checked{{/if}} type="checkbox">
+                                                
+                                                <span class="slider"></span>
+                                                <input class="switch_pid" type="hidden" value="{{pid}}">
+                                                <input class="switch_available" type="hidden" value="{{is_available}}">
+                                            </label>
                                         </td>
                                     </tr>
                                 {{/each}}
@@ -108,13 +115,13 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
-                <h5 class='modal-title' id='exampleModalLabel'>Ngưng phục vụ</h5>
+                <h5 class='modal-title' id='exampleModalLabel'>Cảnh báo</h5>
                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
                     <span aria-hidden='true'>&times;</span>
                 </button>
             </div>
             <div class='modal-body'>
-                Ngưng phục vụ món ăn này ?
+                Nếu bạn xóa sản phẩm này rất có thể sẽ ảnh hưởng đến các bản ghi khác ? Bạn vẫn chắc chắn sẽ xóa nó ?
             </div>
             <div class='modal-footer'>
                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
@@ -124,3 +131,21 @@
     </div>
 </div>
 
+<script>
+    $('.switchBtn').click(function() {
+        
+        let pid = $(this).siblings('.switch_pid').val();
+        let is_available = $(this).siblings('.switch_available').val();
+        
+        $.ajax({
+            url: `/admin/status-product/${pid}/${is_available}`,
+            method: 'GET',
+            success: function(result) {
+               
+            },
+            error: function(err) {
+                alert(err);
+            }
+        })
+    })
+</script>
