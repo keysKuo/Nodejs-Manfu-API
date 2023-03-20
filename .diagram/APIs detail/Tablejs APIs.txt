@@ -188,6 +188,3 @@ Body:
 
 
 ----------------------------------------------------------------------------------------------------------------
-
-See more at: https://documenter.getpostman.com/view/23243291/2s93JzMLyC?fbclid=IwAR2PmF6iaoHDCJn_Wu6qgaY_ouA_4ANIl7cKtY2nZkSa0STEYCbrU0sUzv4#c0ff6136-f020-4948-93ce-f8f036c06eed
-
