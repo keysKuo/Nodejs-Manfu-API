@@ -97,12 +97,12 @@ router.get('/delete-product/:pid', async (req, res, next) => {
             })    
         }
         else {
-            req.flash('error', 'Xóa sản phẩm thất bại');
+            req.flash('error', 'Sản phẩm có quan hệ với các bản ghi khác. Cần xóa các bản ghi đó trước khi thực hiện thao tác này.');
         }
         return res.redirect('/admin/storage-product');
     })
     .catch(err => {
-        req.flash('error', 'Xóa sản phẩm thất bại');
+        req.flash('error', 'Sản phẩm không thể xóa do câu lệnh bị lỗi');
         return res.redirect('/admin/storage-product');
     })
 })
@@ -220,7 +220,7 @@ router.get('/preview-product/:pid', async (req, res, next) => {
     })
 })
 
-// [PUT] Switch Status of product -> /admin/status-product/:pid
+// [PUT] Switch Status of product -> /admin/status-product/:pid/:is_available
 router.get('/status-product/:pid/:is_available', async (req, res, next) => {
     
     const { pid, is_available } = req.params;
@@ -234,10 +234,12 @@ router.get('/status-product/:pid/:is_available', async (req, res, next) => {
     .then(async result => {
         result = await result.json();
         
-        return res.redirect('/admin/storage-product');
+        // return res.redirect('/admin/storage-product');
+        return res.sendStatus(200);
     })
     .catch(err => {
-        return res.redirect('/admin/storage-product');
+        // return res.redirect('/admin/storage-product');
+        return res.sendStatus(500);
     })
 })
 

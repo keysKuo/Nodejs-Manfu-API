@@ -1,4 +1,4 @@
-create database manfu
+--create database manfu
 --drop database manfu
 use manfu
 
@@ -82,17 +82,22 @@ create table __ORDER (
 )
 
 
------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
 
 
---ticket_priority = 10, extra_priority = 9, vegatable_priority = 8
---buffet_priority = 7-5, alacarte_priority = 4-2
+--ticket_priority = 10, 
+--extra_priority = 9, 
+--vegatable_priority = 8
+--buffet_priority = 7-5, 
+--alacarte_priority = 4-2
 --1-0 are extra priority values
 --buffet will have the price be 0
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available, image_link) 
-values ('TK00000001', N'ticket buffet lẩu','ticket', 500000, 10, 1, null)
+insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available, image_link) values ('TK00000001', N'ticket buffet lẩu','ticket', 500000, 10, 1, null)
+insert into __PRODUCT values ('TK00000002', N'ticket buffet tráng miệng','ticket', 100000, 10, 1, null)
 insert into __PRODUCT values ('EX00000001', N'khăn lạnh', 'extra',5000, 9, 1, null)
-insert into __PRODUCT values ('FD00000001', N'bò tái','buffet', 50000, 5, 1, null)
+insert into __PRODUCT values ('EX00000002', N'đũa', 'extra', 2000, 9, 0, null)
+insert into __PRODUCT values ('FD00000001', N'bò tái','buffet', 0, 7, 1, null)
+insert into __PRODUCT values ('FD00000002', N'bò tái trứng','buffet', 0, 5, 1, null)
 insert into __PRODUCT values ('AL00000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
 insert into __PRODUCT values ('AL00000002', N'bò xào tam vị', 'alacarte', 35000, 3, 0, null)
 --select * from __PRODUCT
@@ -113,23 +118,29 @@ insert into __ACCOUNT values ('AC00000002', '123456', 0, 'EMP0000002')
 --select * from __ACCOUNT
 
 
-insert into __TABLE (table_ID, table_seat, is_available) 
-values ('TAB0000001', 4, 1)
+insert into __TABLE (table_ID, table_seat, is_available) values ('TAB0000001', 10, 1)
 insert into __TABLE values ('TAB0000002', 8, 1)
-insert into __TABLE values ('TAB0000003', 10, 1)
+insert into __TABLE values ('TAB0000003', 5, 1)
+--select * from __TABLE
+
 
 insert into __BILL values ('B0001', 2000000, GETDATE(), 0, 'TAB0000001', 'EMP0000005')
-select * from __BILL
+--select * from __BILL
+
 
 insert into __ORDER values ('OD00000001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001', 'B0001')
-insert into __ORDER values ('OD00000002', GETDATE(), 'AL00000001', 150000, 3, 'waiting', 6, 'TAB0000001', 'B0001')
-select * from __ORDER ORDER BY order_priority desc, created_at asc
-delete from __ORDER 
+insert into __ORDER values ('OD00000002', GETDATE(), 'AL00000001', 150000, 3, 'preparing', 6, 'TAB0000001', 'B0001')
+--select * from __ORDER ORDER BY order_priority desc, created_at asc
+--delete from __ORDER 
 
 
-delete from __PRODUCT where product_ID = 'EX00000002'
-select * from __PRODUCT where product_ID = 'EX00000002'
-select * from __PRODUCT where image_link is null or image_link = ''
+----------------------------------------------------------------------------------------------------------------------
+
+
+--delete from __PRODUCT where product_ID = 'EX00000002'
+--select * from __PRODUCT where product_ID = 'EX00000002'
+--select * from __PRODUCT where image_link is null or image_link = ''
+
 
 --update __TABLE set is_available = 0 where table_ID = 'TAB0000004'
 --select * from __TABLE

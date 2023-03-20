@@ -82,6 +82,7 @@ clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
 .menu_content {
     padding-left: 200px;
 		position: relative;
+    
 }
 .menu_content h4 {
     font-size: 25px;
@@ -183,6 +184,8 @@ clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
   padding: 3px 50px;
   
 }
+
+
 
 icon-shape {
     display: inline-flex;

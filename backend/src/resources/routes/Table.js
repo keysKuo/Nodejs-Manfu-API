@@ -285,14 +285,14 @@ router.put('/open-table/:tid', async (req, res, next) => {
     }
     else if (tableStatus == 0) {
         return res.status(500).json({
-            success: true,
+            success: false,
             code: 0,
             message: `Table ${tid} is currently being used with ${bill_ID}! You can not create a bill!`
         })
     }
     else if (checkStaff == 0) {
         return res.status(500).json({
-            success: true,
+            success: false,
             code: 0,
             message: `Staff with ID: ${staff_ID} does not exist!`
         })

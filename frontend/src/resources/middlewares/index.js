@@ -18,3 +18,15 @@ module.exports.generatePID = (cate) => {
 
     return pid + uuid().substring(0,8);
 }
+
+module.exports.match_2arr = (arr1, arr2) => {
+    let result = [];
+    for (let i = 0; i < arr1.length; i++) {
+        result.push({
+            product_ID: arr1[i],
+            quantity: arr2[i]
+        })
+    }
+
+    return result;
+}
