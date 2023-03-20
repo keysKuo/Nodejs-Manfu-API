@@ -75,6 +75,7 @@ router.put('/close-bill/:bid', async (req, res, next) => {
                             total_price: total_price.data.total.toLocaleString(),
                             tax_value: "10%",
                             final_price: (total_price.data.total + (total_price.data.total * 10 / 100)).toLocaleString(),
+                            is_completed: bill.data.is_completed
                         })
                     })
                     .catch((err) => { return res.status(500).json({ success: false, code: "PROC_SWITCH_STATUS_TABLE", message: err }) })
