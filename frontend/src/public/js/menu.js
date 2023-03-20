@@ -64,7 +64,7 @@ $('.btnPlaceOrder').click(function(e) {
     var input2 = $('.qty');
     let data = [];
     for(var i = 0; i < input1.length; i++){
-        
+        // alert("hello")
         data.push({
             product_ID: $(input1[i]).val(),
             quantity: $(input2[i]).text()
@@ -79,7 +79,7 @@ $('.btnPlaceOrder').click(function(e) {
             console.log(result)
         },
         error: function(err) {
-            
+            console.log(err)
         }
     })
 

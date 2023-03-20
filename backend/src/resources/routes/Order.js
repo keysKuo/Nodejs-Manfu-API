@@ -209,11 +209,32 @@ router.put('/update-status/:oid', async (req, res, next) => {
 // [POST] Create order -> /api/orders/create-order/
 router.post('/create-order', async (req, res, next) => {
     const { table_ID, bill_ID, data } = req.body // data = product_ID, quantity
+    let message = ''
     // bill_ID -> check bill exist and bill status -> get billID and tableID
     let bill = await checkExistObject('FN_VIEW_BILL()', `WHERE bill_ID = '${bill_ID}'`)
+    if (!bill.data) {
+        message = `${bill_ID} does not exist!`
+        return res.status(500).json({ success: false, message: message })
+    }
+    if (bill.data.is_completed) {
+        message = `${bill_ID} is completed!`
+        return res.status(500).json({ success: false, message: message })
+    }
     let table = await checkExistObject('FN_GET_ALL_TABLE()', `WHERE table_ID = '${table_ID}'`)
+    if (!table.data) {
+        message = `${table_ID} does not exist!`
+        return res.status(500).json({ success: false, message: message })
+    }
+    if (table.data.is_available) {
+        message = `${table_ID} is not opened yet! It does not have any people sitting there`
+        return res.status(500).json({ success: false, message: message })
+    }
+    if (bill.data.table_ID != table.data.table_ID) {
+        message = `${table_ID} does not match table_ID from ${bill_ID}!`
+        return res.status(500).json({ success: false, message: message })
+    }
     let isSuccess = true;
-    if (bill.success == true && bill.data.is_completed == false && table.data.is_available == false && bill.data.table_ID == table.data.table_ID) {
+    if (bill.success == true) {
         data.forEach(async element => {
             // product_ID -> check product exists -> order priority and price
             let product = await checkExistObject('FN_VIEW_PRODUCT_STORAGE()', `WHERE product_ID = '${element.product_ID}'`)
@@ -234,8 +255,8 @@ router.post('/create-order', async (req, res, next) => {
                 await db.ExecProc({
                     procedure: `PROC_INSERT_ORDER '${order_id}', '${product_ID}', ${price}, ${quantity}, '${order_status}', ${order_priority}, '${table_ID}', '${bill_ID}'`
                 })
-                .then(() => { 
-                    // console.log("true")
+                    .then(() => {
+                        // console.log("true")
                     })
                     .catch((err) => {
                         console.log(err)
@@ -254,7 +275,7 @@ router.post('/create-order', async (req, res, next) => {
         }
     }
     else {
-        return res.status(300).json({ success: false, message: `The Bill: ${bill_ID} is closed and cannot create orders!` })
+        return res.status(404).json({ success: false, message: `The Bill: ${bill_ID} is does not exist and cannot create orders!` })
     }
 })
 

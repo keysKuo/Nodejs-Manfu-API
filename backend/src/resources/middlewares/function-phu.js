@@ -109,7 +109,7 @@ module.exports = {
                 }
             }
             else if (order_status == 'preparing') {
-                if (status != 'success') {
+                if (status == 'waiting') {
                     result = {
                         success: false,
                         message: 'Invalid status change! Order is in PREPARING status! Next logical status is success!'
@@ -140,7 +140,7 @@ module.exports = {
             else {
                 result = {
                     success: false,
-                    message: `Order's current status is Invalid!`
+                    message: `${oid}'s current status is Invalid!`
                 }
             }
         }

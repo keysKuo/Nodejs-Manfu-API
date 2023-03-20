@@ -137,6 +137,14 @@ insert into __ORDER values ('OD00000002', GETDATE(), 'AL00000001', 150000, 3, 'p
 ----------------------------------------------------------------------------------------------------------------------
 
 
+insert into __TABLE values ('TABLE1', 5, 0)
+insert into __TABLE values ('TABLE2', 5, 0)
+update __TABLE set is_available = 1
+insert into __BILL values ('BILL1', 0, GETDATE(), 0, 'TABLE1', 'EMP0000005')
+insert into __BILL values ('BILL2', 0, GETDATE(), 0, 'TABLE1', 'EMP0000005')
+update __BILL set is_completed = 0
+
+
 --delete from __PRODUCT where product_ID = 'EX00000002'
 --select * from __PRODUCT where product_ID = 'EX00000002'
 --select * from __PRODUCT where image_link is null or image_link = ''
