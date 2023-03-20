@@ -87,7 +87,6 @@ router.put('/close-bill/:bid', async (req, res, next) => {
 })
 
 
-// [PUT] Update bill  -> /api/bills/update/:bid
 router.put("/update/:bid", async (req, res, next) => {
     const { bid } = req.params
     const { total_price, created_at, is_completed, table_ID, staff_ID } = req.body
@@ -99,8 +98,7 @@ router.put("/update/:bid", async (req, res, next) => {
             return res.status(200).json({
                 success: true,
                 code: 1,
-                message: `${bid} was updated at ${moment().format('YYYY-MM-DD HH:mm:ss')}`,
-                data: { ...req.body }
+                message: `${bid} was updated at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
             })
         })
         .catch((err) => { return res.status(500).json({ success: false, message: err }) })
