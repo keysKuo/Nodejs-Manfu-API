@@ -15,7 +15,9 @@ const { match_2arr } = require('../middlewares/index');
 router.get('/home', (req, res, next) => {
     req.session.table_ID = 'TABLE1',
     req.session.bill_ID = 'BILL1'
-    return res.redirect('/client/menu');
+    return res.render('pages/clients/home', {
+        layout: 'main'
+    })
 })
 
 router.post('/create-order', async (req, res, next) => {
@@ -68,11 +70,15 @@ router.get('/menu', async (req, res, next) => {
                     })
                 }
 
+                let mid = Math.floor(orders.length/2)
+                let firstHalf = orders.splice(0, mid);
+                let secondHalf = orders;
+                
                 return res.render('pages/clients/menu', {
                     layout: 'main',
                     success: req.flash('success') || '',
                     error: req.flash('error') || '',
-                    orders: orders,
+                    firstHalf, secondHalf,
                     table_ID, bill_ID
                 })
             }
