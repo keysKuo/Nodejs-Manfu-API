@@ -149,6 +149,7 @@ update __BILL set is_completed = 0
 --select * from __PRODUCT where product_ID = 'EX00000002'
 --select * from __PRODUCT where image_link is null or image_link = ''
 
+update __ORDER set order_status = 'waiting' where order_ID = 'OD00000001'
 
 --update __TABLE set is_available = 0 where table_ID = 'TAB0000004'
 --select * from __TABLE
