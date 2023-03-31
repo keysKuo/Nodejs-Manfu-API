@@ -92,16 +92,32 @@ create table __ORDER (
 --alacarte_priority = 4-2
 --1-0 are extra priority values
 --buffet will have the price be 0
-insert into __PRODUCT (product_ID, product_name, product_category, product_price, product_priority, is_available, image_link) values ('TK00000001', N'ticket buffet lẩu','ticket', 500000, 10, 1, null)
-insert into __PRODUCT values ('TK00000002', N'ticket buffet tráng miệng','ticket', 100000, 10, 1, null)
-insert into __PRODUCT values ('EX00000001', N'khăn lạnh', 'extra',5000, 9, 1, null)
-insert into __PRODUCT values ('EX00000002', N'đũa', 'extra', 2000, 9, 0, null)
-insert into __PRODUCT values ('FD00000001', N'bò tái','buffet', 0, 7, 1, null)
-insert into __PRODUCT values ('FD00000002', N'bò tái trứng','buffet', 0, 5, 1, null)
-insert into __PRODUCT values ('AL00000001', N'bò xào ngũ vị', 'alacarte', 75000, 4, 1, null)
-insert into __PRODUCT values ('AL00000002', N'bò xào tam vị', 'alacarte', 35000, 3, 0, null)
---select * from __PRODUCT
 
+--select * from __PRODUCT
+--delete from __Product
+
+-- Extra --
+insert into __PRODUCT values ('EX0001', N'Vé buffet buổi trưa','extra', 399000, 10, 1, null)
+insert into __PRODUCT values ('EX0002', N'Vé buffet buổi tối','extra', 449000, 10, 1, null)
+insert into __PRODUCT values ('EX0003', N'Vé buffet quầy line','extra', 49000, 10, 1, null)
+insert into __PRODUCT values ('EX0004', N'Vé buffet bia','extra', 89000, 10, 1, null)
+insert into __PRODUCT values ('EX0005', N'Khăn lạnh', 'extra',5000, 9, 1, null)
+
+-- Alacarte --
+insert into __PRODUCT values ('AL0001', N'Mì xào hải sản', 'alacarte', 150000, 2, 1, null)
+insert into __PRODUCT values ('AL0002', N'Cơm chiên cá mặn', 'alacarte', 176000, 2, 1, null)
+insert into __PRODUCT values ('AL0003', N'Mực xào sa tế', 'alacarte', 190000, 2, 1, null)
+insert into __PRODUCT values ('AL0004', N'Đậu hủ chiên giòn', 'alacarte', 60000, 3, 1, null)
+insert into __PRODUCT values ('AL0005', N'Cải thìa xào xì dầu', 'alacarte', 60000, 3, 1, null)
+insert into __PRODUCT values ('AL0006', N'Cá diêu hồng hấp hongkong', 'alacarte', 250000, 2, 1, null)
+
+-- Buffet --
+insert into __PRODUCT values ('BF0001', N'Nạc vai heo', 'buffet', 0, 4, 1, null)
+insert into __PRODUCT values ('BF0002', N'Gầu bò hoa trứng', 'buffet', 0, 4, 1, null)
+insert into __PRODUCT values ('BF0003', N'Sủi cảo tôm', 'buffet', 0, 4, 1, null)
+insert into __PRODUCT values ('BF0004', N'Đầu cá hồi', 'buffet', 0, 5, 1, null)
+insert into __PRODUCT values ('BF0005', N'Mề gà', 'buffet', 0, 4, 1, null)
+insert into __PRODUCT values ('BF0006', N'Ba chỉ bò úc', 'buffet', 0, 5, 1, null)
 
 insert into __STAFF (staff_ID, staff_name, join_date, role, is_available) 
 values ('EMP0000001', N'Nguyên Văn A', getdate(), 'manager', 1)
@@ -118,40 +134,28 @@ insert into __ACCOUNT values ('AC00000002', '123456', 0, 'EMP0000002')
 --select * from __ACCOUNT
 
 
-insert into __TABLE (table_ID, table_seat, is_available) values ('TAB0000001', 10, 1)
-insert into __TABLE values ('TAB0000002', 8, 1)
-insert into __TABLE values ('TAB0000003', 5, 1)
---select * from __TABLE
+insert into __TABLE (table_ID, table_seat, is_available) values ('B1', 4, 1)
+insert into __TABLE values ('B2', 8, 1)
+insert into __TABLE values ('B3', 4, 1)
+insert into __TABLE values ('B4', 4, 1)
+insert into __TABLE values ('B5', 8, 1)
+insert into __TABLE values ('B6', 10, 1)
 
+--update __table set is_available = 1
+--delete From __ORder
+--delete From __BILL
+--update __Product set product_price = 0 where product_category = 'buffet'
 
-insert into __BILL values ('B0001', 2000000, GETDATE(), 0, 'TAB0000001', 'EMP0000005')
---select * from __BILL
-
-
-insert into __ORDER values ('OD00000001', GETDATE(), 'FD00000001', 50000, 2, 'waiting', 5, 'TAB0000001', 'B0001')
-insert into __ORDER values ('OD00000002', GETDATE(), 'AL00000001', 150000, 3, 'preparing', 6, 'TAB0000001', 'B0001')
---select * from __ORDER ORDER BY order_priority desc, created_at asc
---delete from __ORDER 
-
-
-----------------------------------------------------------------------------------------------------------------------
-
-
-insert into __TABLE values ('TABLE1', 5, 0)
-insert into __TABLE values ('TABLE2', 5, 0)
-update __TABLE set is_available = 1
-insert into __BILL values ('BILL1', 0, GETDATE(), 0, 'TABLE1', 'EMP0000005')
-insert into __BILL values ('BILL2', 0, GETDATE(), 0, 'TABLE1', 'EMP0000005')
-update __BILL set is_completed = 0
+--select * FROM __BILL
 
 
 --delete from __PRODUCT where product_ID = 'EX00000002'
 --select * from __PRODUCT where product_ID = 'EX00000002'
 --select * from __PRODUCT where image_link is null or image_link = ''
 
-update __ORDER set order_status = 'waiting' where order_ID = 'OD00000001'
 
 --update __TABLE set is_available = 0 where table_ID = 'TAB0000004'
 --select * from __TABLE
 --update __BILL set is_completed = 0 where bill_ID = 'B39924603-'
 --select * from __BILL
+
