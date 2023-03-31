@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="/css/menu.css">
-
 <section id="our_menu" class="pt-5 pb-5">
+<div class="w-50 mx-auto alert alert-success">Hello</div>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12">
@@ -29,12 +29,14 @@
 				<div class="tab-pane fade show active" id="breakfast" role="tabpanel" aria-labelledby="breakfast-tab">
 					<div class="row">
 						<div class="col-md-6">
-							{{#each firstHalf}}
+							{{#each buffets.[0]}}
 							<div id="{{pid}}" class="single_menu">
-								<img class="pimg" src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
 									<h4 class="pname">{{pname}} </h4>
+									
 									<span class="price">{{formatCurrency price}}</span>
+									
 									<p class="pid d-none">{{pid}}</p>
 
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
@@ -53,12 +55,14 @@
 						</div>
 
 						<div class="col-md-6">
-							{{#each secondHalf}}
+							{{#each buffets.[1]}}
 							<div id="{{pid}}" class="single_menu">
-								<img class="pimg" src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
 									<h4 class="pname">{{pname}} </h4>
+									
 									<span class="price">{{formatCurrency price}}</span>
+									
 									<p class="pid d-none">{{pid}}</p>
 
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
@@ -80,11 +84,16 @@
 				<div class="tab-pane fade" id="lunch" role="tabpanel" aria-labelledby="lunch-tab">
 					<div class="row">
 						<div class="col-md-6">
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
+							{{#each alacartes.[0]}}
+							<div id="{{pid}}" class="single_menu">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
+									<h4 class="pname">{{pname}} </h4>
+									
+									<span class="price">{{#when price 'gt' 0}}{{formatCurrency price}}{{/when}}</span>
+									
+									<p class="pid d-none">{{pid}}</p>
+
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
 										<input type="button" value="-"
 											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
@@ -97,63 +106,22 @@
 									</div>
 								</div>
 							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
-								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
+							{{/each}}
+							
 
 
 						</div>
 						<div class="col-md-6">
-							<div class="single_menu">
-								<img src="https://i.imgur.com/TAq7lDR.jpg" alt="burger">
+							{{#each alacartes.[1]}}
+							<div id="{{pid}}" class="single_menu">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
-									<h4>Thịt bò ba chỉ <span></span></h4>
+									<h4 class="pname">{{pname}} </h4>
+									
+									<span class="price">{{formatCurrency price}}</span>
+									
+									<p class="pid d-none">{{pid}}</p>
+
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
 										<input type="button" value="-"
 											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
@@ -166,66 +134,24 @@
 									</div>
 								</div>
 							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Nấm đùi gà <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
-								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
+							{{/each}}
+							
 						</div>
 					</div>
 				</div>
 				<div class="tab-pane fade" id="dinner" role="tabpanel" aria-labelledby="dinner-tab">
 					<div class="row">
 						<div class="col-md-6">
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
+							{{#each extras.[0]}}
+							<div id="{{pid}}" class="single_menu">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
+									<h4 class="pname">{{pname}} </h4>
+									
+									<span class="price">{{formatCurrency price}}</span>
+									
+									<p class="pid d-none">{{pid}}</p>
+
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
 										<input type="button" value="-"
 											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
@@ -238,63 +164,21 @@
 									</div>
 								</div>
 							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
-								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
+							{{/each}}
 
 
 						</div>
 						<div class="col-md-6">
-							<div class="single_menu">
-								<img src="https://i.imgur.com/TAq7lDR.jpg" alt="burger">
+							{{#each extras.[1]}}
+							<div id="{{pid}}" class="single_menu">
+								<img class="pimg" src="/images/Logo/manfu-logo2.png" alt="burger">
 								<div class="menu_content">
-									<h4>Thịt bò ba chỉ <span></span></h4>
+									<h4 class="pname">{{pname}} </h4>
+									
+									<span class="price">{{formatCurrency price}}</span>
+									
+									<p class="pid d-none">{{pid}}</p>
+
 									<div class="qty-box input-group w-auto justify-content-end align-items-center">
 										<input type="button" value="-"
 											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
@@ -307,55 +191,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Nấm đùi gà <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/kbpceNv.jpg" alt="burger">
-								<div class="menu_content">
-									<h4>Gầu bò hoa trứng <span></span></h4>
-									<!-- 										<p>Aperiam tempore sit,perferendis numquam repudiandae porro voluptate dicta saepe facilis.</p> -->
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
-							<div class="single_menu">
-								<img src="https://i.imgur.com/lYKUORL.jpg" alt="black coffee">
-								<div class="menu_content">
-									<h4>Tàu hũ ky <span></span></h4>
-									<div class="qty-box input-group w-auto justify-content-end align-items-center">
-										<input type="button" value="-"
-											class="button-minus border rounded-circle  icon-shape icon-sm mx-1 "
-											data-field="quantity">
-										<input type="number" step="1" readonly max="10" value="0" name="quantity"
-											class="quantity-field border-0 text-center w-25 ml-2">
-										<input type="button" value="+"
-											class="button-plus border rounded-circle icon-shape icon-sm "
-											data-field="quantity">
-									</div>
-								</div>
-							</div>
+							{{/each}}
 						</div>
 					</div>
 				</div>
@@ -365,14 +201,55 @@
 	</div>
 
 	<div type="button" class="cartBtn" data-toggle="modal" data-target="#cartModal">
-		<span><i class="fas fa-shopping-cart"></i> 1.999.000đ</span>
+		<i class="fas fa-shopping-cart"></i><span class="total-price"> {{total}}đ</span>
 	</div>
-	<div type="button" class="cartBtn left-hand" data-toggle="modal" data-target="#cartModal">
-		<span><i class="fas fa-sync fa-spin "></i> Bàn B5 </span>
+	<div type="button" class="cartBtn left-hand" data-toggle="modal" data-target="#orderModal">
+		<i class="fas fa-sync fa-spin "></i><span> Bàn {{table_ID}} </span>
 	</div>
 
 </section>
 
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header border-bottom-0">
+				<h5 class="modal-title" id="orderModal">
+					Danh sách món ăn đã gọi
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-image">
+					<thead>
+						<tr>
+							
+							<th scope="col">Món ăn</th>
+							<th scope="col">Số lượng</th>
+							<th scope="col">Gọi lúc</th>
+							<th scope="col">Tình trạng</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody id="orderBody">
+						
+
+					</tbody>
+				</table>
+				<div class="d-flex justify-content-end">
+					<h5>Total: <span class="total-price text-success">0đ</span></h5>
+				</div>
+			</div>
+			<div class="modal-footer border-top-0 d-flex justify-content-between">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Trở về</button>
+				<button type="button" data-toggle="modal" data-target="#modalBill" 
+						class="btn btn-success btnBill">Tính tiền</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 	aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -389,7 +266,7 @@
 				<table class="table table-image">
 					<thead>
 						<tr>
-							<th scope="col"></th>
+							
 							<th scope="col">Món ăn</th>
 							<th scope="col">Đơn giá</th>
 							<th scope="col">Số lượng</th>
@@ -416,16 +293,38 @@
 					</tbody>
 				</table>
 				<div class="d-flex justify-content-end">
-					<h5>Total: <span class="price text-success">1.999.000đ</span></h5>
+					<h5>Total: <span class="total-price text-success">0đ</span></h5>
 				</div>
 			</div>
 			<div class="modal-footer border-top-0 d-flex justify-content-between">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Trở về</button>
-				<button style="background-color: crimson; border-color: crimson" type="button"
+				<button data-dismiss="modal" style="background-color: crimson; border-color: crimson" type="button"
 						class="btn btn-success btnPlaceOrder">Gọi món</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="modalBill" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Tính tiền bàn</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn muốn tính tiền ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Trở về</button>
+        <a href="/client/tinh-tien" type="button" class="btn btn-primary">Xác nhận</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="bill_ID" class="d-none">{{bill_ID}}</div>
 
 <script src="/js/menu.js"></script>

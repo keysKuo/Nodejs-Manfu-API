@@ -4,60 +4,81 @@ const router = express.Router();
 const fetch = require('node-fetch');
 const fileapis = require('../middlewares/fileapis');
 const API_URL = process.env.API_URL;
-const { upload } = require('../middlewares/multer');
+const { twoHalf, getTime } = require('../middlewares/index');
 
 // [GET] Food Queue /kitchen/queue
 router.get('/queue', async (req, res, next) => {
-    await fetch(API_URL + `/orders/get-orders`, {
+    let { key } = req.query || '';
+    
+    await fetch(API_URL + `/orders/get-orders/chef`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
     .then(async result => {
         result = await result.json();
+        let orders = [];
         
         if (result.success) {
             let data = result.data;
-            let orders = [];
             if(data.length != 0) {
                 // return res.json(data);
                 orders = data.map(d => {
                     let nextStatus = '';
                     switch (d.order_status) {
                         case 'waiting':
-                            nextStatus = `<a href="/kitchen/switch-status-order/${d.order_ID}/preparing" style="font-size: 10px" class="btn btn-primary w-100 mt-2 mb-3">Nhận đơn</a>`
+                            nextStatus = `<a onclick="switchStatus('${d.order_ID}', 'preparing')" data-id="${d.order_ID}" style="font-size: 10px" class="btn btn-primary sw-preparing w-100 mt-2 mb-3">Nhận đơn</a>`
                             break;
                         case 'preparing':
-                            nextStatus = `<a href="/kitchen/switch-status-order/${d.order_ID}/success" style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</a>`
+                            nextStatus = `<a onclick="switchStatus('${d.order_ID}', 'success')" data-id="${d.order_ID}" style="font-size: 10px" class="btn btn-success sw-success w-100 mt-2 mb-3">Hoàn thành</a>`
                             break;
                         default:
                             break;
                     }
 
                     return {
+                        order_ID: d.order_ID,
                         pname: d.product_name,
                         table: d.table_ID,
-                        created_at: d.created_at,
+                        status: d.order_status,
+                        created_at: getTime(d.created_at),
                         nextStatus:  nextStatus                      
                     }
                 })
             }
-            return res.render('pages/kitchen/list', {
-                layout: 'main',
-                template: 'page',
-                orders: orders,
-                success: req.flash('success') || '',
-                error: req.flash('error') || '' ,
-            })
+            
         }
 
-        return res.json(result)
+        let orders_prepare = [];
+        let orders_wait = [];
+
+        orders.forEach(o => {
+            if (o.status == 'waiting') {
+                orders_wait.push(o);
+            }
+            else {
+                orders_prepare.push(o);
+            }
+        })
+        
+        if(key == 'reload') {
+            return res.status(200).send({orders_wait, orders_prepare})
+        }
+
+        return res.render('pages/kitchen/list', {
+            layout: 'main',
+            template: 'page',
+            orders_wait: orders_wait,
+            orders_prepare: orders_prepare,
+            success: req.flash('success') || '',
+            error: req.flash('error') || '' ,
+        })
     })
     .catch(err => {
         return res.status(500).json({err});
     })
-
-    
+   
 })
+
 
 // [GET] Switch status order /kitchen/switch-status-order/:oid/:status
 router.get('/switch-status-order/:oid/:status', async (req, res, next) => {
@@ -72,7 +93,7 @@ router.get('/switch-status-order/:oid/:status', async (req, res, next) => {
     .then(async result => {
         result = await result.json();
         if (result.success) {
-            console.log('success');
+            // console.log('success');
             return res.redirect('/kitchen/queue');
         }
         else {

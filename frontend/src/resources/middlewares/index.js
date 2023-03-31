@@ -30,3 +30,15 @@ module.exports.match_2arr = (arr1, arr2) => {
 
     return result;
 }
+
+module.exports.twoHalf = (list) => {
+    let mid = Math.floor(list.length + 1) / 2;
+    let first = list.splice(0, mid);
+    return [first, list];
+}
+
+
+module.exports.getTime = (date) => {
+    let time = date.split('T');
+    return time[1].split('\.')[0];
+}

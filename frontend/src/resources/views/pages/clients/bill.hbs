@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="/css/bill.css">
+
+<div id="bill-page" class="center">
+    <div id="bill-box">
+        <a href="/client/menu" class="btn btn-secondary btn-back"><i class="fas fa-sync"></i> Trở về</a>
+        <div class="mx-auto w-100 text-center h2 mb-3">Xác nhận kiểm đồ</div>
+        
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                <th scope="col">Tên món</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                
+                <th class="text-center" scope="col">Số lượng</th>
+                <th class="text-center auto-hide" scope="col">Đơn giá</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                {{#each items}}
+                    <tr>
+                        <td colspan="7" scope="row">{{pname}}</td>
+                        <td class="text-center">{{quantity}}</td>
+                        <td class="text-center auto-hide">{{formatCurrency price}}</td>
+                        
+                    </tr>
+                {{/each}}
+                    
+                    <tr class="auto-hide">
+                        <td colspan="9" scope="row">
+                            <hr>
+                        </td >
+                    </tr>
+                    <tr class="auto-hide">
+                        <td colspan="7" scope="row">Tổng tiền hàng</td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{formatCurrency total}}</td>
+                        
+                    </tr>
+                    <tr class="auto-hide">
+                        <td colspan="7" scope="row">VAT</td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{tax}}</td>
+                        
+                    </tr>
+                    <tr class="auto-hide">
+                        <td colspan="7" scope="row">Tổng tiền phải trả</td>
+                        <td class="text-center"></td>
+                        <td class="text-center">{{formatCurrency final_price}}</td>
+                        
+                    </tr>
+                    
+                
+                
+                
+            </tbody>
+            </table>
+
+            <a data-id="{{bill_ID}}" class="w-25 btn btn-success mt-5 btnContinueBill">Tiếp tục</a>
+            <a href="/client/thanh-toan/{{bill_ID}}" class="w-25 btn btn-success mt-5 btnPayMent">Thanh toán</a>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        
+        $('.auto-hide').hide();
+        $('.btnPayMent').hide();
+
+        $('.btnContinueBill').click(function() {
+            
+            $('.auto-hide').show();
+            $(this).hide();
+            
+            $('.btnPayMent').show();
+        })
+    })
+</script>

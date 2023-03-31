@@ -186,7 +186,7 @@ module.exports = {
 
     getStatusBasedOnCategory: function (category) {
         let result
-        if (category == 'ticket')
+        if (category == 'extra')
             result = 'success'
         else
             result = 'waiting'

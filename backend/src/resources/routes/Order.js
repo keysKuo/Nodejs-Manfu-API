@@ -85,7 +85,7 @@ router.get('/get-orders/status/:status', async (req, res, next) => {
 router.get("/get-orders/chef", async (req, res, next) => {
     await db.CallFunc({
         function: `FN_REFRESH_ORDER_QUEUE()`,
-        optional: `WHERE order_status = 'waiting' OR order_status = 'preparing' ORDER BY order_priority desc, created_at asc`
+        optional: `ORDER BY order_priority desc, created_at asc`
     })
         .then((data) => {
             if (data.length == 0) {
@@ -139,6 +139,37 @@ router.get("/get-orders/id/:oid", async (req, res, next) => {
                 message: err
             })
         })
+})
+
+router.get('/get-orders-by-bill/:bill_ID', async (req, res, next) => {
+    const { bill_ID } = req.params;
+
+    await db.CallFunc({
+        function: `FN_GET_ORDERING_BY_BILL ('${bill_ID}')`,
+        optional: 'order by created_at desc'
+    })
+    .then(data => {
+        if (data.length != 0) {
+            let total = 0;
+            let orders = data.map(d => {
+                total += d.price * d.quantity;
+                return {
+                    pid: d.product_ID,
+                    pname: d.product_name,
+                    price: d.price,
+                    quantity: d.quantity,
+                    status: d.order_status,
+                    created_at: d.created_at
+                }
+            })
+            return res.status(200).json({success: true, data: {orders, total}});
+        };
+        
+        return res.status(404).json({success: false, msg: 'Không tìm thấy order nào'});
+    })
+    .catch(err => {
+        return res.status(500).json({success: false, err})
+    })
 })
 
 
@@ -233,12 +264,17 @@ router.post('/create-order', async (req, res, next) => {
         message = `${table_ID} does not match table_ID from ${bill_ID}!`
         return res.status(500).json({ success: false, message: message })
     }
+
+    if (!data) {
+        return res.status(300).json({success: false, message: 'Vui lòng chọn món trước khi order'});
+    }
     let isSuccess = true;
+    
     if (bill.success == true) {
         data.forEach(async element => {
             // product_ID -> check product exists -> order priority and price
             let product = await checkExistObject('FN_VIEW_PRODUCT_STORAGE()', `WHERE product_ID = '${element.product_ID}'`)
-
+            
             if (product.success == true) {
                 let product_ID = product.data.product_ID
                 let price = product.data.product_price
@@ -256,7 +292,7 @@ router.post('/create-order', async (req, res, next) => {
                     procedure: `PROC_INSERT_ORDER '${order_id}', '${product_ID}', ${price}, ${quantity}, '${order_status}', ${order_priority}, '${table_ID}', '${bill_ID}'`
                 })
                     .then(() => {
-                        // console.log("true")
+                        
                     })
                     .catch((err) => {
                         console.log(err)
@@ -265,11 +301,13 @@ router.post('/create-order', async (req, res, next) => {
                     })
             }
             // if product does not exist then we do not save it in
-        });
+        })
+
         if (isSuccess) {
             return res.status(200).json({
-                success: true, code: 1, message: `Order for Bill: ${bill_ID} was created at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
+                success: true, code: 1, bill_ID, message: `Order for Bill: ${bill_ID} was created at ${moment().format('YYYY-MM-DD HH:mm:ss')}`
             })
+    
         } else {
             return res.status(500).json({ success: false, message: err })
         }

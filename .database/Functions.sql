@@ -77,7 +77,9 @@ Create function FN_REFRESH_ORDER_QUEUE ()
 Returns table  
 As  
 Return      
-    Select * From __ORDER
+    Select P.product_name, O.* From __ORDER O , __PRODUCT P 
+    Where O.product_ID = P.product_ID And O.order_status != 'success'
+    AND O.order_status != 'cancel'
 GO
 -- View Orders History - DUNG
 Create Function FN_VIEW_ORDERS_HISTORY (@date Date)  
@@ -118,6 +120,15 @@ AS
         FROM __TABLE  
         )
 GO
+
+-- VIEW FOODS WHICH ARE ORDERED OF A TABLE (BILL)
+Create Function FN_GET_ORDERING_BY_BILL (@bill_ID varchar(10))
+Returns table 
+As
+Return 
+    Select P.product_ID, P.product_name, O.price, O.quantity, O.order_status, O.created_at FROM __ORDER O, __PRODUCT P
+    Where P.product_ID = O.product_ID And O.bill_ID = @bill_ID
+GO  
 
 
 SELECT name, definition, type_desc 

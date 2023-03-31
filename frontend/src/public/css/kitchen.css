@@ -40,7 +40,7 @@ button {
   padding: var(--size-4);
 }
 .main__form {
-  max-width: 40em;
+  max-width: 80em;
 }
 
 .form {

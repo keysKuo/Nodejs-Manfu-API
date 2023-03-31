@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="/css/kitchen.css">
 <main class="main page__main">
+  <div class="w-100 text-center h1">
+        <img src="/images/Logo/manfu-logo2.png" alt="">
+        </div>
     <form class="form main__form" id="mainForm" action="javascript:void(0);" method="GET">
       <label class="search-box" for="search">
         <span class="sr-only">Search</span>
@@ -7,8 +10,11 @@
         <input class="search-box__input" id="search" type="text" name="search" placeholder="Tìm kiếm ..."/>
       </label>
       
-        <ul id="formList" class="form__list">
-            {{#each orders}}
+        <div class="row">
+          <div class="col-md-6">
+            <div style="background-color: #FE6244; border-radius: 5px" class="w-50 mx-auto mb-3 py-2 h4 text-center">Đang chờ</div>
+            <ul id="formList" class="form__list form-wait">
+            {{#each orders_wait}}
                 <li class="form__item">
                     <div class="img-box inline__block">
                             <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
@@ -27,7 +33,7 @@
                             {{!-- <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div> --}}
                             {{#if nextStatus}}
                                 {{{nextStatus}}}
-                                <a style="font-size: 10px" class="btn btn-danger w-100 ">Hủy</a>
+                                <a onclick="switchStatus('{{order_ID}}','cancel')" data-id="{{order_ID}}" style="font-size: 10px" class="btn btn-danger sw-cancel w-100 ">Hủy</a>
                             {{/if}}
                             <p style="visibility: hidden;">...</p>
                         </div>
@@ -39,6 +45,43 @@
             
             
         </ul>
+          </div>
+          <div class="col-md-6">
+            <div style="background-color: #F7DB6A; border-radius: 5px" class="w-50 mx-auto mb-3 py-2 h4 text-center">Đang chế biến</div>
+            <ul id="formList" class="form__list form-prepare">
+            {{#each orders_prepare}}
+                <li class="form__item">
+                    <div class="img-box inline__block">
+                            <img style="width: 100%" src="/images/Logo/manfu-test.png" alt="">
+                            <p style="visibility: hidden;">...</p>
+                        </div>
+                        <div class="info-box inline__block">
+                            {{!-- <p style="visibility: hidden;">...</p> --}}
+                            <p><b>Món: </b>{{pname}}</p>
+                            <p><b>Bàn: </b>{{table}}</p>
+                            <p><b>Order lúc: </b>{{created_at}}</p>
+                            <p style="visibility: hidden;">...</p>
+    
+                        </div>
+                        <div class="check-box inline__block">
+                            {{!-- <div style="font-size: 10px" class="btn btn-success w-100 my-2">Done</div> --}}
+                            {{!-- <div style="font-size: 10px" class="btn btn-success w-100 mt-2 mb-3">Hoàn thành</div> --}}
+                            {{#if nextStatus}}
+                                {{{nextStatus}}}
+                                <a onclick="switchStatus('{{order_ID}}','cancel')" data-id="{{order_ID}}" style="font-size: 10px" class="btn btn-danger sw-cancel w-100 ">Hủy</a>
+                            {{/if}}
+                            <p style="visibility: hidden;">...</p>
+                        </div>
+                
+                </li>
+            {{/each}}
+            
+            
+            
+            
+        </ul>
+          </div>
+        </div>
 
     </form>
   </main>
@@ -74,3 +117,5 @@ function removeAscent (str) {
   return str;
 }
 </script>
+
+<script src="/js/kitchen.js"></script>

@@ -1,0 +1,34 @@
+.center {
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    text-align: center;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('https://fonts.googleapis.com/css?family=Roboto-Mono/');
+}
+* {
+    font-family: 'Roboto';
+}
+
+
+#bill-page {
+    width: 100%;
+    height: 100vh;
+    /* background-color: skyblue; */
+}
+
+#bill-box {
+    position: relative;
+    width: 40%;
+    height: 50vh;
+    /* background-color: thistle; */
+}
+
+.btn-back {
+    position: absolute;
+    top: -100px;
+    right: -100px;
+}

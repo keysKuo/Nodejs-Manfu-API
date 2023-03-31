@@ -9,9 +9,7 @@ router(app);
 
 app.get('/', async (req, res, next) => {
 
-    return res.render('pages/admin', {
-        layout: 'admin'
-    })
+    return res.redirect('/client/home');
 
 })
 
