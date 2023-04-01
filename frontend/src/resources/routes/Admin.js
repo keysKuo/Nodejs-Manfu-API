@@ -7,8 +7,54 @@ const API_URL = process.env.API_URL;
 const { upload } = require('../middlewares/multer');
 const moment = require('moment');
 
+router.get('/', async (req, res, next) => {
+    if (!req.session.role) {
+        return res.redirect('/admin/login');
+    }
+
+    return res.render('pages/admin', {
+        layout: 'admin',
+        role: req.session.role,
+        success: req.flash('success') || '',
+        error: req.flash('error') || ''
+    });
+})
+
+router.get('/login', (req ,res, next) => {
+    return res.render('pages/login', {
+        layout: 'main',
+        success: req.flash('success') || '',
+        error: req.flash('error') || ''
+    });
+})
+
+router.get('/logout', (req, res, next) => {
+    req.session.destroy();
+    return res.redirect('/admin/login');
+})
+
+router.post('/login', async (req, res, next) => {
+    const { account_ID, password } = req.body;
+    
+    let body = JSON.stringify({account_ID, password});
+    await fetch(API_URL + 'users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': ' application/json'},
+        body: body
+    })
+    .then(async result => {
+        result = await result.json();
+        req.session.role = result.role;
+        return res.redirect('/admin')
+    })
+})
+
 // [GET] Storage product /admin/storage-product
 router.get('/storage-product', async (req, res, next) => {
+    if(req.session.role == 'staff') {
+        req.flash('error', 'Bạn không đủ quyền hạn để truy cập');
+        return res.redirect('/admin');
+    }
     await fetch(API_URL + `products/storage` , {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
@@ -278,6 +324,11 @@ router.get('/preview-staff/:uid', async (req, res, next) => {
 
 // [GET] List all the staffs -> /admin/list-staffs
 router.get('/list-staffs', async (req, res, next) => {
+    if(req.session.role != 'manager') {
+        req.flash('error', 'Bạn không đủ quyền hạn để truy cập');
+        return res.redirect('/admin');
+    }
+
     await fetch(API_URL + '/users/getUsers', {
         method: 'GET', 
         headers: {'Content-Type': 'application/json'}
@@ -331,30 +382,51 @@ router.get('/status-staff/:uid/:is_available', async (req, res, next) => {
 })
 
 router.get('/revenue', async (req, res, next) => {
-    let { shift } = req.query || '';
-    let key = (shift) ? `?shift=${shift}` : '';
+    if(req.session.role != 'manager') {
+        req.flash('error', 'Bạn không đủ quyền hạn để truy cập');
+        return res.redirect('/admin');
+    }
 
+    let { date, shift } = req.query;
+    if (!date) 
+        date = moment(new Date()).format("YYYY-MM-DD");
+    let key = (shift) ? `?date=${date}&shift=${shift}` : `?date=${date}`;
+    
     await fetch(API_URL + `/bills/get-bills-of-day${key}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
     })
     .then(async result => {
         result = await result.json();
-        let bills = result.data.map(d => {
-            return {
-                bill_ID: d.bill_ID,
-                created_at: moment(d.created_at).format('YYYY-MM-DD HH:mm:ss'),
-                table_ID: d.table_ID,
-                staff_ID: d.staff_ID,
-                total_price: d.total_price,
-                is_completed: (d.is_completed) ? 'Hoàn thành' : 'Đã hủy'
+        
+        if(result.success) {
+            let data = result.data;
+            
+            bills = [];
+            if(data.length != 0) {
+                bills = data.map(d => {
+                    return {
+                        bill_ID: d.bill_ID,
+                        created_at: moment(d.created_at).format('YYYY-MM-DD HH:mm:ss'),
+                        table_ID: d.table_ID,
+                        staff_ID: d.staff_ID,
+                        total_price: d.total_price,
+                        is_completed: (d.is_completed) ? `<p style="color: rgb(100, 226, 145) ">Hoàn thành</p>` : `<p style="color: crimson ">Chưa thanh toán</p>`
+                    }
+                });
             }
-        });
-        // return res.json(result)
+            // return res.json(result)
+            return res.render('pages/revenue/list', {
+                layout: 'admin',
+                bills
+            });
+        }
+        
         return res.render('pages/revenue/list', {
             layout: 'admin',
-            bills
+            
         });
+        
     })
 })
 

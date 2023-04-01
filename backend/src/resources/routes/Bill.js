@@ -25,7 +25,8 @@ router.get('/get-bills', async (req, res, next) => {
 
 // [GET] Get all bills of shift -> /api/bills/get-bills-of-day
 router.get('/get-bills-of-day', async (req, res, next) => {
-    let { shift } = req.query || '';
+    let { date, shift } = req.query || '';
+   
     let start = 8;
     let end = 22;
     if(shift) {
@@ -39,10 +40,11 @@ router.get('/get-bills-of-day', async (req, res, next) => {
     }
 
     await db.CallFunc({
-        function: `FN_VIEW_BILL_HISTORY (${start}, ${end})`,
+        function: `FN_VIEW_BILL_HISTORY ('${date}', ${start}, ${end})`,
         optional: `ORDER BY created_at desc`
     })
         .then((data) => {
+            
             if (data.length == 0)
                 return res.status(300).json({ success: false, code: 0, message: `There are no bill(s)` })
             else

@@ -14,7 +14,7 @@ RETURN (
     SELECT *    
     FROM __BILL  
     )  
-GO
+
 -- CALCULATE BILL
 CREATE FUNCTION FN_CALCULATE_BILL (@bill_ID varchar(10))  
 RETURNS TABLE  
@@ -24,28 +24,28 @@ RETURN (
     FROM FN_VIEW_BILL_INFO(@bill_ID)   
     WHERE bill_ID = @bill_ID  
     )  
-GO
+
 -- VIEW BILL HISTORY - DUNG
-Create Function FN_VIEW_BILL_HISTORY (@start int, @end int)  
+Create Function FN_VIEW_BILL_HISTORY (@date date, @start int, @end int)  
 Returns Table  
 As   
 Return      
     Select * From __BILL     
-    Where Convert(date,created_at) = Convert(date, GETDATE())
+    Where Convert(date,created_at) = Convert(date, @date)
     And DATEPART(hour, created_at) >= @start And DATEPART(hour, created_at) <= @end
-GO
+
 -- VIEW BILL INFO - DUNG
 Create Function FN_VIEW_BILL_INFO (@bill_ID varchar(10))  
 Returns Table   
 As  
 Return       
-    Select B.bill_ID, P.product_name, O.price, O.quantity, P.product_category, B.created_at, B.total_price, B.is_completed      
+    Select B.bill_ID, P.product_name, O.price, O.quantity, P.product_catery, B.created_at, B.total_price, B.is_completed      
     From __Product P, __Order O, __Bill B      
     Where B.bill_ID = O.bill_ID       
     And O.product_ID = P.product_ID       
     And O.order_status = 'success'       
     And B.bill_ID = @bill_ID  
-GO
+
 
 
 -- VIEW MENU (CLIENT SIDE/AVAILABLE) - DUNG
@@ -55,14 +55,14 @@ As
 Return       
     Select * From __PRODUCT      
     Where is_available = 1
-GO
+
 -- VIEW PRODUCT STORAGE - DUNG
 Create Function FN_VIEW_PRODUCT_STORAGE ()  
 Returns Table  
 As   
 Return      
     Select * From __PRODUCT
-GO
+
 -- VIEW PRODUCT INFO BY ID - DUNG
 Create Function FN_FIND_A_PRORDUCT_BY_ID (@pid varchar(10))  
 Returns Table   
@@ -70,7 +70,7 @@ As
 Return       
     Select * From __PRODUCT      
     Where product_ID = @pid
-GO
+
 
 
 --  REFRESH ORDER QUEUE (VIEW ORDER) - DUNG
@@ -81,7 +81,7 @@ Return
     Select P.product_name, O.* From __ORDER O , __PRODUCT P 
     Where O.product_ID = P.product_ID And O.order_status != 'success'
     AND O.order_status != 'cancel'
-GO
+
 -- View Orders History - DUNG
 Create Function FN_VIEW_ORDERS_HISTORY (@date Date)  
 Returns Table  
@@ -89,7 +89,7 @@ As
 Return      
     Select * From __ORDER      
     Where created_at = @date
-GO
+
 
 
 -- Find a Staff by ID - DUNG
@@ -99,7 +99,7 @@ As
 Return      
     Select * From __STAFF      
     Where staff_ID = @staff_ID
-GO
+
 
 
 -- Find an Account by ID - DUNG
@@ -109,7 +109,7 @@ As
 Return       
     Select * From __ACCOUNT      
     Where account_ID = @account_ID
-GO
+
 
 
 -- VIEW ALL TABLES
@@ -120,7 +120,7 @@ AS
         SELECT *      
         FROM __TABLE  
         )
-GO
+
 
 -- VIEW FOODS WHICH ARE ORDERED OF A TABLE (BILL)
 Create Function FN_GET_ORDERING_BY_BILL (@bill_ID varchar(10))
@@ -129,7 +129,7 @@ As
 Return 
     Select O.order_ID, P.product_ID, P.product_name, O.price, O.quantity, O.order_status, O.created_at FROM __ORDER O, __PRODUCT P
     Where P.product_ID = O.product_ID And O.bill_ID = @bill_ID
-GO  
+  
 
 
 

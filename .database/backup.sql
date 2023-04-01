@@ -129,8 +129,9 @@ insert into __STAFF values ('EMP0000005', N'Nguyên Văn E', getdate(), 'chef', 
 
 
 insert into __ACCOUNT (account_ID, account_password, is_available, staff_ID)
-values ('AC00000001', '123456', 1, 'EMP0000001')
-insert into __ACCOUNT values ('AC00000002', '123456', 0, 'EMP0000002')
+values ('KC001', '9952811', 1, 'EMP0000004')
+insert into __ACCOUNT values ('MN001', '9952811', 1, 'EMP0000002')
+insert into __ACCOUNT values ('ST001', '9952811', 1, 'EMP0000003')
 --select * from __ACCOUNT
 
 

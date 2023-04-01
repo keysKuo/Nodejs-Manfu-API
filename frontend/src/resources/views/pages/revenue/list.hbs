@@ -20,9 +20,12 @@
     <div class='row'>
         <div class='col-md-12'>
             <div class='card shadow'>
-                <div class='card-header d-flex justify-content-between'>
+                <div class='card-header d-flex justify-content-end'>
                     <h4>{{pageName}}</h4>
-                    <select class="form-select shift-select" aria-label="Default select example">
+                    <input type="date" id="date">
+                    
+                    </select>
+                    <select id="selected" class="form-select shift-select ml-4" aria-label="Default select example">
                     <option value="" selected>Cả ngày</option>
                     <option value="1">Ca 1</option>
                     <option value="2">Ca 2</option>
@@ -59,7 +62,7 @@
                                                 {{formatCurrency total_price}}
                                         </td>
                                         <td>
-                                            {{is_completed}}
+                                            {{{is_completed}}}
                                         </td>
                                         
                                     </tr>
@@ -104,6 +107,17 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        document.getElementById('date').valueAsDate = new Date();
+    })
+
+    $('#date').on('change', function() {
+        var selected = document.getElementById("selected");
+        selected.selectedIndex = 0
+        let shift = $('#selected').val();
+        ajaxBill(shift);
+    })
+
     $('.switchBtn').click(function() {
         
         let pid = $(this).siblings('.switch_pid').val();
@@ -123,8 +137,13 @@
 
     $('.shift-select').on('change', function() {
         let shift = $(this).val() || '';
+        
+        ajaxBill(shift);
+    })
 
-        let key = (shift) ? `?shift=${shift}` : '';
+    function ajaxBill(shift) {
+        let date = $('#date').val();
+        let key = (shift) ? `?date=${date}&shift=${shift}` : `?date=${date}`;
         $.ajax({
             url: `http://localhost:8000/api/bills/get-bills-of-day${key}`,
             headers: {
@@ -138,7 +157,7 @@
                 let bills = result.data;
                 for (let i = 0; i < bills.length; i++) {
                     let total_price = bills[i].total_price.toLocaleString('vi', { style: 'currency', currency: 'VND' });
-                    let is_completed =  bills[i].is_completed ? 'Hoàn Thành' : 'Thất bại';
+                    let is_completed =  bills[i].is_completed ?  `<p style="color: rgb(100, 226, 145) ">Hoàn thành</p>` : `<p style="color: crimson ">Chưa thanh toán</p>`
                     $('.billBody').append(
                         `
                             <tr>
@@ -168,5 +187,5 @@
             }
 
         })
-    })
+    }
 </script>

@@ -51,22 +51,40 @@ router.get('/getUsers', async (req, res, next) => {
 
 // [POST] Login account -> /api/users/login
 router.post('/login', async (req, res, next) => {
-    const { uid, password } = req.body;
+    const { account_ID, password } = req.body;
     
     await db.Query(queryString('select', {
         select: '*',
-        table: '__STAFF',
-        where: `staff_ID = '${uid}'`
+        table: '__ACCOUNT',
+        where: `account_ID = '${account_ID}'`
     }))
     .then(async records => {   
         if(records.length != 0) {
-            return bcrypt.compare(password, records[0].password)
-                .then(result => {
-                    if(result)
-                        return res.status(200).json({success: true, data: {uid: records[0].staff_ID, role: records[0].roles}})
-                    return res.status(300).json({success: false, msg: 'Mật khẩu không chính xác'});
-                })
+            // return bcrypt.compare(password, records[0].password)
+            //     .then(result => {
+            //         if(result)
+            //             return res.status(200).json({success: true, data: {uid: records[0].staff_ID, role: records[0].roles}})
+            //         return res.status(300).json({success: false, msg: 'Mật khẩu không chính xác'});
+            //     })
+            
+            if (records[0].account_password == password) {
+                let key = records[0].account_ID.slice(0,2);
+                let role = 'staff';
+                switch(key) {
+                    case 'KC':
+                        role = 'chef' ;
+                        break;
+                    case 'MN':
+                        role = 'manager';
+                        break;
+                    default:
+                        break;
+                }
+                return res.status(200).json({success: true, role: role})
             }
+
+            return res.status(300).json({success: false, msg: 'Mật khẩu không chính xác'});
+        }
         return res.status(404).json({success: false, msg: 'Tài khoản không tồn tại'})
     })
         

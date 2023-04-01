@@ -166,8 +166,8 @@ clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #71EFA3;
-  border: 2px solid #71EFA3;
+  background-color: crimson;
+  border: 2px solid crimson;
   border-radius: 5px !important;
   padding: 5px 10px;
   font-weight: 700;
@@ -190,8 +190,8 @@ clip-path: polygon(0% 0%, 100% 0, 100% 50%, 100% 100%, 0% 100%);
 
 .left-hand {
   margin-bottom: 55px;
-  background-color: crimson;
-  border-color: crimson;
+  background-color: var(--main-color);
+  border-color: var(--main-color);
 	color: white;
 }
 
