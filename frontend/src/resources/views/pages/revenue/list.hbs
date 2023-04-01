@@ -1,0 +1,172 @@
+{{#if success}}
+    <div class='alert alert-success alert-dismissible fade show' role='alert'>
+        {{success}}
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+        </button>
+    </div>
+{{/if}}
+
+{{#if error}}
+    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        {{error}}
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+        </button>
+    </div>
+{{/if}}
+
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='card shadow'>
+                <div class='card-header d-flex justify-content-between'>
+                    <h4>{{pageName}}</h4>
+                    <select class="form-select shift-select" aria-label="Default select example">
+                    <option value="" selected>Cả ngày</option>
+                    <option value="1">Ca 1</option>
+                    <option value="2">Ca 2</option>
+                    
+                    </select>
+                </div>
+                <div class='card-body'>
+                    <table class='table table-hover data-table'>
+                        <thead class='thead-light'>
+                            <tr>
+                                <th scope='col'>Mã đơn</th>
+                                <th scope='col'>Ngày tạo</th>
+                                <th scope='col'>Bàn</th>
+                                <th scope='col'>Nhân viên</th>
+                                <th scope='col'>Tổng tiền</th>
+                                <th scope='col'>Trạng thái</th>
+                                {{!-- <th scope='col'>Điều chỉnh</th> --}}
+                                <th scope='col'></th>
+                            </tr>
+                        </thead>
+                        <tbody class="billBody">
+                            {{#if bills}}
+                                {{#each bills}}
+                                    <tr>
+                                        <td>{{bill_ID}}</td>
+                                        <td>{{created_at}}</td>
+                                        <td>
+                                            {{table_ID}}
+                                        </td>
+                                        <td>       
+                                            {{staff_ID}}
+                                        </td>
+                                        <td>
+                                                {{formatCurrency total_price}}
+                                        </td>
+                                        <td>
+                                            {{is_completed}}
+                                        </td>
+                                        
+                                    </tr>
+                                {{/each}}
+                            {{else}}
+                                <tr><td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            {{/if}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class='modal fade' id='deleteModal'>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='exampleModalLabel'>Cảnh báo</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                Nếu bạn xóa sản phẩm này rất có thể sẽ ảnh hưởng đến các bản ghi khác ? Bạn vẫn chắc chắn sẽ xóa nó ?
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+                <a type='button' id='deleteBtn' class='btn btn-danger'>Xác nhận</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.switchBtn').click(function() {
+        
+        let pid = $(this).siblings('.switch_pid').val();
+        let is_available = $(this).siblings('.switch_available').val();
+        
+        $.ajax({
+            url: `/admin/status-product/${pid}/${is_available}`,
+            method: 'GET',
+            success: function(result) {
+               
+            },
+            error: function(err) {
+                alert(err);
+            }
+        })
+    })
+
+    $('.shift-select').on('change', function() {
+        let shift = $(this).val() || '';
+
+        let key = (shift) ? `?shift=${shift}` : '';
+        $.ajax({
+            url: `http://localhost:8000/api/bills/get-bills-of-day${key}`,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type':'application/json'
+            },
+            dataType: 'json',
+            method: 'GET',
+            success: function(result) {
+                $('.billBody').empty();
+                let bills = result.data;
+                for (let i = 0; i < bills.length; i++) {
+                    let total_price = bills[i].total_price.toLocaleString('vi', { style: 'currency', currency: 'VND' });
+                    let is_completed =  bills[i].is_completed ? 'Hoàn Thành' : 'Thất bại';
+                    $('.billBody').append(
+                        `
+                            <tr>
+                                <td>${bills[i].bill_ID}</td>
+                                <td>${bills[i].created_at}</td>
+                                <td>
+                                    ${bills[i].table_ID}
+                                </td>
+                                <td>       
+                                    ${bills[i].staff_ID}
+                                </td>
+                                <td>
+                                        ${total_price}
+                                </td>
+                                <td>
+                                    ${is_completed}
+                                </td>
+                                
+                            </tr>
+                        `
+                    )
+                }
+                console.log(result);
+            },
+            error: function(err) {
+                alert('Không tìm thấy đơn nào');
+            }
+
+        })
+    })
+</script>

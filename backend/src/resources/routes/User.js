@@ -114,11 +114,10 @@ router.put('/switch-status/:uid', async (req, res, next) => {
     const { is_available } = req.body;
     
     let available = (is_available == "true") ? 0 : 1;
-    await db.Execute(queryString('update', {
-        table: '__STAFF',
-        set: `is_available = ${available}`,
-        where: `staff_ID = '${uid}'`
-    }))
+
+    await db.ExecProc({
+        procedure: `PROC_SWITCH_STATUS_STAFF '${uid}', ${available}`
+    })
     .then(() => {
         return res.status(200).json({success: true, msg: 'Chỉnh sửa trạng thái thành công'});
     })

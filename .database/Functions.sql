@@ -26,12 +26,13 @@ RETURN (
     )  
 GO
 -- VIEW BILL HISTORY - DUNG
-Create Function FN_VIEW_BILL_HISTORY (@date Date)  
+Create Function FN_VIEW_BILL_HISTORY (@start int, @end int)  
 Returns Table  
 As   
 Return      
-    Select * From __BILL       
-    Where created_at = @date
+    Select * From __BILL     
+    Where Convert(date,created_at) = Convert(date, GETDATE())
+    And DATEPART(hour, created_at) >= @start And DATEPART(hour, created_at) <= @end
 GO
 -- VIEW BILL INFO - DUNG
 Create Function FN_VIEW_BILL_INFO (@bill_ID varchar(10))  
@@ -126,9 +127,10 @@ Create Function FN_GET_ORDERING_BY_BILL (@bill_ID varchar(10))
 Returns table 
 As
 Return 
-    Select P.product_ID, P.product_name, O.price, O.quantity, O.order_status, O.created_at FROM __ORDER O, __PRODUCT P
+    Select O.order_ID, P.product_ID, P.product_name, O.price, O.quantity, O.order_status, O.created_at FROM __ORDER O, __PRODUCT P
     Where P.product_ID = O.product_ID And O.bill_ID = @bill_ID
 GO  
+
 
 
 SELECT name, definition, type_desc 

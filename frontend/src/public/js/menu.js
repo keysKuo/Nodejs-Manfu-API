@@ -153,14 +153,35 @@ $(document).ready(function() {
         }
     }
 
+
     let bill_ID = $('#bill_ID').text() || '';
     
     ajaxOrders(bill_ID);
+
+    
 
     setInterval(function() {
         ajaxOrders(bill_ID);
     }, 5000)
 })
+
+
+function cancelOrder(order_ID) {
+    $.ajax({
+        url: `/kitchen/switch-status-order/${order_ID}/cancel`,
+        method: 'GET',
+        success: function(result) {
+            
+            ajaxOrders($('#bill_ID').text());
+        },
+        error: function(err) {
+            alert(err);
+        }
+    }) 
+    
+}
+
+
 
 function ajaxOrders(bill_ID) {
     $.ajax({
@@ -175,23 +196,29 @@ function ajaxOrders(bill_ID) {
             orders.forEach(o => {
                 let time = formatDate(o.created_at);
                 let color = '';
-                let status = ''
+                let status = '';
+                let cancel = '';
+                
                 switch (o.status) {
                     case 'cancel':
                         color = 'crimson';
-                        status = 'Đã hủy'
+                        status = 'Đã hủy';
+                        cancel = '<td></td>'
                         break;
                     case 'waiting':
                         color = '#FE6244';
                         status = 'Đang gọi'
+                        cancel = `<td><button onclick="cancelOrder('${o.order_ID}')" class="px-2 btn-danger rounded"><i class="fas fa-times"></i></button></td>`
                         break;
                     case 'preparing':
                         color = '#F7DB6A';
                         status = 'Đang chế biến'
+                        cancel = '<td></td>'
                         break;
                     case 'success':
                         color = '#64E291';
                         status = 'Đã xong'
+                        cancel = '<td></td>'
                         break;
                     default:
                         break;
@@ -204,7 +231,7 @@ function ajaxOrders(bill_ID) {
                     <td>${o.quantity}</td>
                     <td>${time}</td>
                     <td><i style="color: ${color}" class="fas fa-solid fa-dot-circle"></i> ${status}</td>
-                    
+                    ${cancel}
                   </tr>`
                   
                 )

@@ -154,6 +154,7 @@ router.get('/get-orders-by-bill/:bill_ID', async (req, res, next) => {
             let orders = data.map(d => {
                 total += d.price * d.quantity;
                 return {
+                    order_ID: d.order_ID,
                     pid: d.product_ID,
                     pname: d.product_name,
                     price: d.price,

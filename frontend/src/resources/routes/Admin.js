@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const fileapis = require('../middlewares/fileapis');
 const API_URL = process.env.API_URL;
 const { upload } = require('../middlewares/multer');
-
+const moment = require('moment');
 
 // [GET] Storage product /admin/storage-product
 router.get('/storage-product', async (req, res, next) => {
@@ -327,6 +327,34 @@ router.get('/status-staff/:uid/:is_available', async (req, res, next) => {
     })
     .catch(err => {
         return res.redirect('/admin/list-staffs');
+    })
+})
+
+router.get('/revenue', async (req, res, next) => {
+    let { shift } = req.query || '';
+    let key = (shift) ? `?shift=${shift}` : '';
+
+    await fetch(API_URL + `/bills/get-bills-of-day${key}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json'}
+    })
+    .then(async result => {
+        result = await result.json();
+        let bills = result.data.map(d => {
+            return {
+                bill_ID: d.bill_ID,
+                created_at: moment(d.created_at).format('YYYY-MM-DD HH:mm:ss'),
+                table_ID: d.table_ID,
+                staff_ID: d.staff_ID,
+                total_price: d.total_price,
+                is_completed: (d.is_completed) ? 'Hoàn thành' : 'Đã hủy'
+            }
+        });
+        // return res.json(result)
+        return res.render('pages/revenue/list', {
+            layout: 'admin',
+            bills
+        });
     })
 })
 

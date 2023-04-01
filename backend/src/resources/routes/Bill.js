@@ -11,8 +11,36 @@ const moment = require('moment');
 // [GET] Get all bills  -> /api/bills/get-bills
 router.get('/get-bills', async (req, res, next) => {
     await db.CallFunc({
-        function: `FN_VIEW_BILL()`,
-        optional: `ORDER BY created_at desc, total_price asc`
+        function: `FN_VIEW_BILL ()`,
+        optional: `ORDER BY created_at desc`
+    })
+        .then((data) => {
+            if (data.length == 0)
+                return res.status(300).json({ success: false, code: 0, message: `There are no bill(s)` })
+            else
+                return res.status(200).json({ success: true, code: 1, item_counter: data.length, data: data })
+        })
+        .catch((err) => { return res.status(500).json({ success: false, message: err }) })
+})
+
+// [GET] Get all bills of shift -> /api/bills/get-bills-of-day
+router.get('/get-bills-of-day', async (req, res, next) => {
+    let { shift } = req.query || '';
+    let start = 8;
+    let end = 22;
+    if(shift) {
+        if (shift == '1') {
+            start = 8;
+            end = 15;
+        }else if (shift == '2') {
+            start = 15
+            end = 22
+        }
+    }
+
+    await db.CallFunc({
+        function: `FN_VIEW_BILL_HISTORY (${start}, ${end})`,
+        optional: `ORDER BY created_at desc`
     })
         .then((data) => {
             if (data.length == 0)
