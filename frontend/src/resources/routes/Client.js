@@ -6,7 +6,7 @@ const fileapis = require('../middlewares/fileapis');
 const API_URL = process.env.API_URL;
 const { upload } = require('../middlewares/multer');
 const { twoHalf, getTime } = require('../middlewares/index');
-const { call_api } = require('sud-libs');
+const { callBackend } = require('sud-libs');
 
 router.get('/home', async (req, res, next) => {
     req.session.staff_ID = "EMP0000001";
@@ -18,7 +18,7 @@ router.get('/home', async (req, res, next) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
     }
-    let tables = await call_api(API_URL + 'tables/get-tables', options, (err) => {
+    let tables = await callBackend(API_URL + 'tables/get-tables', options, (err) => {
         console.log(err);
     })
 
