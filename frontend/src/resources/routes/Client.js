@@ -6,36 +6,51 @@ const fileapis = require('../middlewares/fileapis');
 const API_URL = process.env.API_URL;
 const { upload } = require('../middlewares/multer');
 const { twoHalf, getTime } = require('../middlewares/index');
-
+const { call_api } = require('sud-libs');
 
 router.get('/home', async (req, res, next) => {
     req.session.staff_ID = "EMP0000001";
     if(req.session.table_ID) {
         return res.redirect('/client/menu')
     }
-    await fetch(API_URL + 'tables/get-tables', {
+
+    let options = {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
+    }
+    let tables = await call_api(API_URL + 'tables/get-tables', options, (err) => {
+        console.log(err);
     })
-    .then(async result => {
-        result = await result.json();
 
-        let tables = [];
-        if (result.success) {
-            tables = result.data;
-        }
+    return res.render('pages/clients/home', {
+        layout: 'main',
+        tables: tables,
+        error: req.flash('error') || ''
+    })
 
-        return res.render('pages/clients/home', {
-            layout: 'main',
-            tables: tables,
-            error: req.flash('error') || ''
-        })
-    })
-    .catch(err => {
-        return res.render('pages/clients/home', {
-            layout: 'main'
-        })
-    })
+    // await fetch(API_URL + 'tables/get-tables', {
+    //     method: 'GET',
+    //     headers: { 'Content-Type': 'application/json'}
+    // })
+    // .then(async result => {
+    //     result = await result.json();
+
+    //     let tables = [];
+    //     if (result.success) {
+    //         tables = result.data;
+    //     }
+
+    //     return res.render('pages/clients/home', {
+    //         layout: 'main',
+    //         tables: tables,
+    //         error: req.flash('error') || ''
+    //     })
+    // })
+    // .catch(err => {
+    //     return res.render('pages/clients/home', {
+    //         layout: 'main'
+    //     })
+    // })
     
 })
 
