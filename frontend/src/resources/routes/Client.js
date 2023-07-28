@@ -18,7 +18,7 @@ router.get('/home', async (req, res, next) => {
         method: 'GET',
         headers: { 'Content-Type': 'application/json'}
     }
-    let tables = await callBackend(API_URL + 'tables/get-tables', options, (err) => {
+    let tables = await callBackend('tables/get-tables', options, (err) => {
         console.log(err);
     })
 
